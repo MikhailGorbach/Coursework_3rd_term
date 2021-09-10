@@ -23,6 +23,7 @@ int MenuCheck(int* a); //Валидация меню
 List* NewTable(int* counter); //Начальное создание таблицы
 List* AddStudent(List* r, int* counter);//Добавление в список
 void Print(List* l); //Просмотр списка
+List* DelStudent(List* l, const int counter);
 //Подсчёт количества неоправданных часов по каждому студенту
 int main()
 {
@@ -63,8 +64,25 @@ int main()
 				r = AddStudent(r, &id);
 				break;
 			case 4:
-
+			{
+				int number = 0;
+				cout << "Введите номер студента для удаления -> ";
+				while (1)
+				{
+					cin >> number;
+					if (number <= id)
+					{
+						break;
+					}
+					else
+					{
+						cout << "Нет такого номера записи!" << endl;
+						system("pause");
+					}
+				}
+				l = DelStudent(l, number);
 				break;
+			}
 			case 5:
 
 				break;
@@ -164,4 +182,30 @@ List* AddStudent(List* r, int* counter)
 		(*counter)++;
 	}
 	return r;
+}
+List* DelStudent(List* l, const int counter)
+{
+	if (!l)
+	{
+		cout << "Список пуст!" << endl;
+		system("pause");
+		return l;
+	}
+	int index = 1;
+	List* temp = l;
+	while (temp)
+	{
+		if (index == counter)
+		{
+			List* tmp = temp;
+			temp = temp->next;
+			delete tmp;
+			return l;
+		}
+		else
+		{
+			index++;
+		}
+		temp = temp->next;
+	}
 }
