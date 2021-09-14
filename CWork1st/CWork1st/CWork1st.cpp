@@ -11,6 +11,7 @@ struct Inf
 	bool gender;
 	int sHours;
 	int jHours;
+	int id;
 };
 struct List
 {
@@ -23,7 +24,7 @@ int MenuCheck(int* a); //Валидация меню
 List* NewTable(int* counter); //Начальное создание таблицы
 List* AddStudent(List* r, int* counter);//Добавление в список
 void Print(List* l); //Просмотр списка
-List* DelStudent(List* l, const int counter);
+void DelStudent(List* l, const int counter);
 //Подсчёт количества неоправданных часов по каждому студенту
 int main()
 {
@@ -65,7 +66,7 @@ int main()
 				break;
 			case 4:
 			{
-				int number = 0;
+				int number = 1;
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
 				{
@@ -80,7 +81,7 @@ int main()
 						system("pause");
 					}
 				}
-				l = DelStudent(l, number);
+				DelStudent(l, number);
 				break;
 			}
 			case 5:
@@ -133,26 +134,22 @@ List* NewTable(int* counter)
 	cout << "Год рождения: "; cin >> a.year;
 	cout << "Количество пропущенных часов: "; cin >> a.sHours;
 	cout << "Количество оправданных часов: "; cin >> a.jHours;
+	a.id = ++(*counter);
 	a.gender = true;
 	l->p = a;
 	l->next = 0;
-	(*counter)++;
+	
 	return l;
 }
 void Print(List* l)
 {
-	if (!l)
-	{
-		cout << "Список пуст!" << endl;
-		system("pause");
-		return;
-	}
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	
 	List* temp = l;
-	cout << "/============\\" << endl;
 	while (temp)
 	{
 		cout << "Группа| Фамилия        |Год рождения|Кол-во пропущенных ч.|Кол-во оправданных ч." << endl;
-		cout << temp->p.сodeGr << "   " << temp->p.surname << " " << temp->p.year << " " << temp->p.sHours << " " << temp->p.jHours << endl;
+		cout << temp->p.id << " " << temp->p.сodeGr << "   " << temp->p.surname << " " << temp->p.year << " " << temp->p.sHours << " " << temp->p.jHours << endl;
 		system("pause");
 		temp = temp->next;
 	}
@@ -175,37 +172,29 @@ List* AddStudent(List* r, int* counter)
 		a.gender = true;
 		cout << "Кол-во пропущенных часов: "; cin >> a.sHours;
 		cout << "Кол-во оправданных часов: "; cin >> a.jHours;
+		a.id = ++(*counter);
 		temp->p = a;
 		temp->next = 0;
 		r->next = temp;
 		r = temp;
-		(*counter)++;
 	}
 	return r;
 }
-List* DelStudent(List* l, const int counter)
+void DelStudent(List* l, int counter)
 {
-	if (!l)
-	{
-		cout << "Список пуст!" << endl;
-		system("pause");
-		return l;
-	}
-	int index = 1;
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+
 	List* temp = l;
-	while (temp)
+	List* tempN = temp->next;
+	while (tempN)
 	{
-		if (index == counter)
+		if (tempN->p.id == counter)
 		{
-			List* tmp = temp;
-			temp = temp->next;
-			delete tmp;
-			return l;
-		}
-		else
-		{
-			index++;
+			temp->next = tempN->next;
+			delete tempN;
+			return;
 		}
 		temp = temp->next;
+		tempN = tempN->next;
 	}
 }
