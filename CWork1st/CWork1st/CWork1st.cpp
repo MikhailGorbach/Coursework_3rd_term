@@ -24,7 +24,9 @@ int MenuCheck(int* a); //Валидация меню
 List* NewTable(int* counter); //Начальное создание таблицы
 List* AddStudent(List* r, int* counter);//Добавление в список
 void Print(List* l); //Просмотр списка
-void DelStudent(List* l, const int counter);
+List* DelFirstStudent(List* l, int* id);
+void DelStudent(List* l, int counter, int* id);
+List* DelLastStudent(List* l, List* r);
 //Подсчёт количества неоправданных часов по каждому студенту
 int main()
 {
@@ -81,7 +83,9 @@ int main()
 						system("pause");
 					}
 				}
-				DelStudent(l, number);
+				if (number == 1) l = DelFirstStudent(l, &id);
+				else if (number == id) r = DelLastStudent(l, r);
+				else DelStudent(l, number, &id);
 				break;
 			}
 			case 5:
@@ -146,13 +150,19 @@ void Print(List* l)
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
 	
 	List* temp = l;
+	cout << "№ Код Фам. Год Часы(пр/опр)" << endl;
 	while (temp)
 	{
-		cout << "Группа| Фамилия        |Год рождения|Кол-во пропущенных ч.|Кол-во оправданных ч." << endl;
-		cout << temp->p.id << " " << temp->p.сodeGr << "   " << temp->p.surname << " " << temp->p.year << " " << temp->p.sHours << " " << temp->p.jHours << endl;
-		system("pause");
+		cout 
+			<< temp->p.id
+			<< " " << temp->p.сodeGr
+			<< "   " << temp->p.surname
+			<< " " << temp->p.year
+			<< " " << temp->p.sHours
+			<< " " << temp->p.jHours << endl;
 		temp = temp->next;
 	}
+	system("pause");
 }
 List* AddStudent(List* r, int* counter)
 {
@@ -180,10 +190,28 @@ List* AddStudent(List* r, int* counter)
 	}
 	return r;
 }
-void DelStudent(List* l, int counter)
+List* DelFirstStudent(List* l, int* id)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
+
+	List* temp = l;
+	l = l->next;
+	delete temp;
+
+	List* tmpId;
+	for (tmpId = l; tmpId; tmpId = tmpId->next)
+	{
+		tmpId->p.id--;
+	}
+	cout << "Первый элемент списка удалён." << endl;
+	system("pause");
+	return l;
+}
+void DelStudent(List* l, int counter, int* id)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-
+	if (!l->next) { cout << "Список пуст!" << endl; system("pause"); return; }
+	
 	List* temp = l;
 	List* tempN = temp->next;
 	while (tempN)
@@ -192,9 +220,31 @@ void DelStudent(List* l, int counter)
 		{
 			temp->next = tempN->next;
 			delete tempN;
-			return;
+			break;
 		}
 		temp = temp->next;
 		tempN = tempN->next;
 	}
+
+	List* tmpId;
+	for (tmpId = l; tmpId; tmpId = tmpId->next)
+	{
+		tmpId->p.id--;
+	}
+	cout << "Элемент " << counter << " удалён." << endl;
+	system("pause");
+}
+List* DelLastStudent(List* l, List* r)
+{
+	if (!r) { cout << "Список пуст!" << endl; system("pause"); return r; }
+
+	for (r = l; r->next->next; r = r->next);
+	
+	List* temp = r->next;
+	r->next = 0;
+	delete temp;
+
+	cout << "Последний элемент списка удалён." << endl;
+	system("pause");
+	return l;
 }
