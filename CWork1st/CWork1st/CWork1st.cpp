@@ -1,8 +1,8 @@
 ﻿#include <iostream>
 #include <string>
-#include <typeinfo>	
+#include <fstream>
 using namespace std;
-
+						//Информация о студенте
 struct Inf
 {
 	string сodeGr;
@@ -12,53 +12,70 @@ struct Inf
 	int sHours;
 	int jHours;
 	int id;
-};
+};	
+						//Структура списка
 struct List
 {
 	Inf p;
 	List* next;
 };
-//                                    Прототипы функций
+										//Прототипы функций
 
-int MenuCheck(int* a); //Валидация меню
-List* NewTable(int* counter); //Начальное создание таблицы
-List* AddStudent(List* r, int* counter);//Добавление в список
-void Print(List* l); //Просмотр списка
-List* DelFirstStudent(List* l, int* id);
-void DelStudent(List* l, int counter, int* id);
-List* DelLastStudent(List* l, List* r);
-//Подсчёт количества неоправданных часов по каждому студенту
+bool MenuCheck(int a);										//Валидация меню
+List* NewTable(int* counter);								//Начальное создание таблицы
+List* AddStudent(List* r, int* counter);					//Добавление в список
+void Print(List* l);										//Просмотр списка
+List* DelFirstStudent(List* l, int* id);					//Удаление первого студента
+void DelStudent(List* l, int counter, int* id);				//Удаление студента по ключу
+List* DelLastStudent(List* l, List* r);						//Удаление последнего студента
+int WriteFile(const string filename, List* l);				//Запись данных в файл
+int ReadFile(const string filename, List** l, List** r);	//Чтение данных из файла
+List* AddNS(Inf a);											//Создание первого элемента (для чтения)
+List* AddS(List* r, Inf a);									//Создание элементов (для чтения)
+void PrintBySur(List* l, string surname);					//Просмотр списка студентов по фамилии
+
 int main()
 {
 	List* l = 0,* r = 0;
 	int id = 0;
+
 	setlocale(LC_ALL, "rus");
+	
 	while (1)
 	{
 		system("cls");
-		cout << " 1 -> Начальное создание таблицы" << endl;
-		cout << " 2 -> Просмотр таблицы" << endl;
-		cout << " 3 -> Добавление новой записи в таблицу" << endl;
-		cout << " 4 -> Удаление записи" << endl;
-		cout << " 5 -> Корректировка записи в таблице" << endl;
-		cout << " 6 -> Сортировка таблицы" << endl;
-		cout << " 7 -> Поиск записи в таблице" << endl;
-		cout << " 8 -> Сохранение таблицы в файле" << endl;
-		cout << " 9 -> Чтение данных из файла" << endl;
-		cout << "10 -> Обработка таблицы и просмотр результатов обработки" << endl;
-		cout << "11 -> Выход" << endl << endl;
-		cout << "Выберите пункт меню -> ";
+		cout
+			<< " 1 -> Начальное создание таблицы" << endl
+		    << " 2 -> Просмотр таблицы" << endl
+			<< " 3 -> Добавление новой записи в таблицу" << endl
+			<< " 4 -> Удаление записи" << endl
+			<< " 5 -> Корректировка записи в таблице" << endl
+			<< " 6 -> Сортировка таблицы" << endl
+			<< " 7 -> Поиск записи в таблице" << endl
+			<< " 8 -> Сохранение таблицы в файле" << endl
+		    << " 9 -> Чтение данных из файла" << endl
+			<< "10 -> Обработка таблицы и просмотр результатов обработки" << endl
+			<< "11 -> Выход" << endl << endl
+			<< "Выберите пункт меню -> ";
 		
 		int key = 0;
 		cin >> key;
 		
-		if (MenuCheck(&key))
+		if (MenuCheck(key) && key < 12 && key > 0)
 		{
 			switch (key)
 			{
 			case 1:
-				l = NewTable(&id);
-				r = l;
+				if (!l)
+				{
+					l = NewTable(&id);
+					r = l;
+				}
+				else
+				{
+					cout << "Таблица уже создана!" << endl;
+					system("pause");
+				}
 				break;
 			case 2:
 				Print(l);
@@ -95,37 +112,49 @@ int main()
 
 				break;
 			case 7:
-
+			{
+				cout << "Введите фамилию студента для поиска: ";
+				string surname = "";
+				cin >> surname;
+				PrintBySur(l, surname);
 				break;
+			}
 			case 8:
-
+			{
+				cout << "Введите название файла и его расширение: ";
+				string filename = "";
+				cin >> filename;
+				WriteFile(filename, l);
 				break;
+			}
 			case 9:
-
+			{
+				cout << "Введите название файла и его расширение: ";
+				string filename = "";
+				cin >> filename;
+				ReadFile(filename, &l, &r);
 				break;
+			}
 			case 10:
 
 				break;
 			case 11:
 				return 0;
-			default:
-				cout << "Выберите пункт из списка!" << endl;
-				system("pause");
 			}
 		}
 		else
 		{
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Выберите пункт из списка!" << endl;
+			system("pause");
 		}
 	}
 }
-int MenuCheck(int* a)
+
+bool MenuCheck(int a)
 {
-	int &key = *a;
-	string s = typeid(key).name();
-	if (s == "int" && key != 0) return 1;
-	return 0;
+	return (a != 0) ? 1 : 0;
 }
 List* NewTable(int* counter)
 {
@@ -247,4 +276,95 @@ List* DelLastStudent(List* l, List* r)
 	cout << "Последний элемент списка удалён." << endl;
 	system("pause");
 	return l;
+}
+int WriteFile(const string filename, List* l)
+{
+	ofstream fout(filename, ios::out);
+
+	if (!fout.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
+
+	List* temp = l;
+
+	while (temp)
+	{
+		fout
+			<< temp->p.id << endl
+			<< temp->p.surname << endl
+			<< temp->p.year << endl
+			<< temp->p.сodeGr << endl
+			<< temp->p.gender << endl
+			<< temp->p.sHours << endl
+			<< temp->p.jHours << endl;
+
+		temp = temp->next;
+	}
+	cout << "Данные записаны в файл " << filename << " ." << endl;
+	system("pause");
+	return 0;
+}
+int ReadFile(const string filename, List** l, List** r)
+{
+	ifstream fin(filename, ios::in);
+
+	if (!fin.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
+
+	*l = 0;
+	Inf a;
+
+	while (fin >> a.id)
+	{
+		fin
+			>> a.surname 
+			>> a.year
+			>> a.сodeGr
+			>> a.gender
+			>> a.sHours
+			>> a.jHours;
+
+		if (*l) { *r = AddS(*r, a); }
+		else { *l = AddNS(a); *r = *l; }
+	}
+	cout << "Данные загружены из файла " << filename << " ." << endl;
+	system("pause");
+	return 0;
+}
+List* AddNS(Inf a)
+{
+	List* temp = new List;
+	temp->p = a;
+	temp->next = 0;
+	return temp;
+}
+List* AddS(List* r, Inf a)
+{
+	List* temp = new List;
+	temp->p = a;
+	temp->next = 0;
+	r->next = temp;
+	r = temp;
+	return r;
+}	
+void PrintBySur(List* l, string surname)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+
+	List* temp = l;
+	cout
+		<< endl << "По фамилии " << surname << " найдены следующие записи:" << endl
+		<< "№ Код Фам. Год Часы(пр/опр)" << endl;
+	while (temp)
+	{
+		if (temp->p.surname == surname)
+		{
+			cout
+				<< temp->p.id
+				<< " " << temp->p.сodeGr
+				<< "   " << temp->p.surname
+				<< " " << temp->p.year
+				<< " " << temp->p.sHours
+				<< " " << temp->p.jHours << endl;
+		}
+		temp = temp->next;
+	}
+	system("pause");
 }
