@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <string>
 #include <fstream>
+#include <conio.h>
+#include <Windows.h>
 using namespace std;
 						//Информация о студенте
 struct Inf
@@ -33,6 +35,10 @@ int ReadFile(const string filename, List** l, List** r);	//Чтение данн
 List* AddNS(Inf a);											//Создание первого элемента (для чтения)
 List* AddS(List* r, Inf a);									//Создание элементов (для чтения)
 void PrintBySur(List* l, string surname);					//Просмотр списка студентов по фамилии
+int SummJHours(List* l);									//Сумма оправданных часов у студентов
+int SummSHours(List* l);									//Сумма неоправданных часов у студентов
+float PerSHours(List* l);									//Процент неоправданных часов
+void ClearStream();											//Чистка потока
 
 int main()
 {
@@ -44,24 +50,26 @@ int main()
 	while (1)
 	{
 		system("cls");
+		cout << "\x1b[36mДобро пожаловать!\x1b[0m" << endl;
 		cout
 			<< " 1 -> Начальное создание таблицы" << endl
-		    << " 2 -> Просмотр таблицы" << endl
+			<< " 2 -> Просмотр таблицы" << endl
 			<< " 3 -> Добавление новой записи в таблицу" << endl
 			<< " 4 -> Удаление записи" << endl
 			<< " 5 -> Корректировка записи в таблице" << endl
 			<< " 6 -> Сортировка таблицы" << endl
 			<< " 7 -> Поиск записи в таблице" << endl
 			<< " 8 -> Сохранение таблицы в файле" << endl
-		    << " 9 -> Чтение данных из файла" << endl
+			<< " 9 -> Чтение данных из файла" << endl
 			<< "10 -> Обработка таблицы и просмотр результатов обработки" << endl
-			<< "11 -> Выход" << endl << endl
-			<< "Выберите пункт меню -> ";
-		
+			<< "11 -> Количество пропущенных часов(оправданных) у всех студентов" << endl
+			<< "12 -> Процент пропущенных(неоправданных) часов" << endl	
+			<< "13 -> Выход" << endl << endl
+			<< "\x1b[31mВыберите пункт меню -> \x1b[0m";
+
 		int key = 0;
 		cin >> key;
-		
-		if (MenuCheck(key) && key < 12 && key > 0)
+		if (MenuCheck(key) && key <= 13 && key > 0)
 		{
 			switch (key)
 			{
@@ -139,13 +147,20 @@ int main()
 
 				break;
 			case 11:
+				cout << "Пропущенно часов(оправданных): " << SummJHours(l) << endl;
+				system("pause");
+				break;
+			case 12:
+				cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
+				system("pause");
+				break;
+			case 13:
 				return 0;
 			}
 		}
 		else
 		{
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			ClearStream();
 			cout << "Выберите пункт из списка!" << endl;
 			system("pause");
 		}
@@ -155,6 +170,11 @@ int main()
 bool MenuCheck(int a)
 {
 	return (a != 0) ? 1 : 0;
+}
+void ClearStream()
+{
+	cin.clear();
+	//cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 List* NewTable(int* counter)
 {
@@ -167,6 +187,7 @@ List* NewTable(int* counter)
 	cout << "Год рождения: "; cin >> a.year;
 	cout << "Количество пропущенных часов: "; cin >> a.sHours;
 	cout << "Количество оправданных часов: "; cin >> a.jHours;
+	cout << "Введите пол (М - 1, Ж - 0): ";
 	a.id = ++(*counter);
 	a.gender = true;
 	l->p = a;
@@ -367,4 +388,39 @@ void PrintBySur(List* l, string surname)
 		temp = temp->next;
 	}
 	system("pause");
+}
+int SummJHours(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0; }
+
+	int sum = 0;
+	List* temp = l;
+	while (temp)
+	{
+		sum += temp->p.jHours;
+		temp = temp->next;
+	}
+	return sum;
+}
+int SummSHours(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0; }
+
+	int sum = 0;
+	List* temp = l;
+	while (temp)
+	{
+		sum += temp->p.sHours;
+		temp = temp->next;
+	}
+	return sum;
+}
+int SummH(List* l)
+{
+	return SummJHours(l) + SummSHours(l);;
+}
+float PerSHours(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0.0f; }
+	return ((float)SummSHours(l) / (float)SummH(l)) * 100;;
 }
