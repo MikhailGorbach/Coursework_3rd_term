@@ -1,11 +1,10 @@
-﻿#include <iostream>
+﻿#include <Windows.h>
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <conio.h>
-#include <Windows.h>
 using namespace std;
-
-//Информация о студенте
+					//Информация о студенте
 struct Inf
 {
 	string сodeGr;
@@ -16,31 +15,40 @@ struct Inf
 	int jHours;
 	int id;
 };
-//Структура списка
+					//Структура списка
 struct List
 {
 	Inf p;
 	List* next;
 };
-//Прототипы функций
-
+					//Прототипы функций
+									//Создание списка
 List* NewTable(int* counter);								//Начальное создание таблицы
 List* AddStudent(List* l, List* r, int* counter);			//Добавление в список
-void Print(List* l);										//Просмотр списка
-List* DelFirstStudent(List* l, int* id);					//Удаление первого студента
-void DelStudent(List* l, int counter, int* id);				//Удаление студента по ключу
-List* DelLastStudent(List* l, List* r);						//Удаление последнего студента
-int WriteFile(const string filename, List* l);				//Запись данных в файл
-int ReadFile(const string filename, List** l, List** r);	//Чтение данных из файла
 List* AddNS(Inf a);											//Создание первого элемента (для чтения)
 List* AddS(List* r, Inf a);									//Создание элементов (для чтения)
+									//Удаление элементов
+List* DelFirstStudent(List* l, int* id);					//Удаление первого студента
+void DelStudent(List* l, int counter, int* id);				//Удаление студента по ключу
+List* DelLastStudent(List* l, List* r, int* id);			//Удаление последнего студента
+									//Просмотр списка
+void Print(List* l);										//Просмотр списка
 void PrintBySur(List* l, string surname);					//Просмотр списка студентов по фамилии
+void PrintById(List* l, int id);							//Просмотр списка по номеру
+									//Файл
+int WriteFile(const string filename, List* l);						//Запись данных в файл
+int ReadFile(const string filename, List** l, List** r, List* end);	//Чтение данных из файла
+									//Работа с часами
 int SummJHours(List* l);									//Сумма оправданных часов у студентов
 int SummSHours(List* l);									//Сумма неоправданных часов у студентов
 float PerSHours(List* l);									//Процент неоправданных часов
-void ClearStream();											//Чистка потока
+									//Менюшки
 void ShowMenu(int iItem);									//Главное меню
 void MenuSearch(int iItem);									//Меню для корректировки полей
+									//Проверки
+void ClearStream();											//Чистка потока
+int YearCheck(int year);
+									//Корректировка
 void CorSurname(List* l, int num);							//Корректировка фамилии студента
 void CorYear(List* l, int num);								//Корректировка года рождения студента
 void CorGroup(List* l, int num);							//Корректировка группы студента
@@ -54,10 +62,6 @@ int main()
 	int id = 0;
 
 	setlocale(LC_ALL, "rus");
-
-	int k = _getch();
-	cout << k << endl;
-	system("pause");
 
 	int iItem = 1;
 	int nLast = 13;
@@ -90,7 +94,7 @@ int main()
 			ShowMenu(iItem);
 			switch (iItem)
 			{
-			case 1:
+			case 1: //Создание таблицы
 				if (!l)
 				{
 					l = NewTable(&id);
@@ -102,24 +106,24 @@ int main()
 					system("pause");
 				}
 				break;
-			case 2:
+			case 2: //Печать таблицы
 				Print(l);
 				break;
-			case 3:
+			case 3: //Добавление студента в список
 				r = AddStudent(l, r, &id);
 				break;
 			case 4:
 			{
-				system("cls");
 				int number = 1;
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
 				{
+					cout << id << endl;
 					cin >> number;
-					if (number <= id)
+					if (number <= id && number > 0)
 					{
 						if (number == 1) l = DelFirstStudent(l, &id);
-						else if (number == id) r = DelLastStudent(l, r);
+						else if (number == id) r = DelLastStudent(l, r, &id);
 						else DelStudent(l, number, &id);
 						break;
 					}
@@ -137,9 +141,10 @@ int main()
 				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
 				int num = 0;
 				cin >> num;
-
+				PrintById(l, num);
+				system("pause");
 				bool bExit = false;
-				
+
 				int iItem = 1;
 				int nLast = 7;
 
@@ -227,7 +232,7 @@ int main()
 				cout << "Введите название файла и его расширение: ";
 				string filename = "";
 				cin >> filename;
-				ReadFile(filename, &l, &r);
+				id = ReadFile(filename, &l, &r, r);
 			}
 			break;
 			case 10:
@@ -247,12 +252,7 @@ int main()
 		}
 	}
 }
-
-void ClearStream()
-{
-	cin.clear();
-	//cin.ignore(numeric_limits<streamsize>::max(), '\n');
-}
+						
 List* NewTable(int* counter)
 {
 	List* l = new List;
@@ -275,12 +275,125 @@ List* NewTable(int* counter)
 
 	return l;
 }
+List* AddStudent(List* l, List* r, int* counter)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
+
+	while (1)
+	{
+		List* temp = new List;
+		Inf a;
+		cout << "Введите данные о студенте: " << endl;
+		cout << "Нажмите *, чтобы прекратить." << endl;
+		string c;
+		cin >> c;
+		if (c == "*") break;
+		cout << "=======================================" << endl;
+		cout << "Код группы: "; cin.get(); getline(cin, a.сodeGr);
+		cout << "Фамилия: "; getline(cin, a.surname);
+		cout << "Год рождения: "; cin >> a.year;
+		cout << "Введите пол (М - 1, Ж - 0): ";
+		int g = 1;
+		cin >> g;
+		if (g == 1) a.gender = true;
+		else a.gender = false;
+		cout << "Кол-во пропущенных часов: "; cin >> a.sHours;
+		cout << "Кол-во оправданных часов: "; cin >> a.jHours;
+		a.id = r->p.id + 1;
+		(*counter)++;
+		temp->p = a;
+		temp->next = 0;
+		r->next = temp;
+		r = temp;
+	}
+	return r;
+}
+List* AddNS(Inf a)
+{
+	List* temp = new List;
+	temp->p = a;
+	temp->next = 0;
+	return temp;
+}
+List* AddS(List* r, Inf a)
+{
+	List* temp = new List;
+	temp->p = a;
+	temp->next = 0;
+	r->next = temp;
+	r = temp;
+	return r;
+}
+
+List* DelFirstStudent(List* l, int* id)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
+
+	List* tmpId;
+	for (tmpId = l; tmpId; tmpId = tmpId->next)
+	{
+		tmpId->p.id--;
+	}
+
+	(*id)--;
+	List* temp = l;
+	l = l->next;
+	delete temp;
+
+	cout << "Первый элемент списка удалён." << endl;
+	system("pause");
+	return l;
+}
+void DelStudent(List* l, int counter, int* id)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Список пуст!" << endl; system("pause"); return; }
+
+	(*id)--;
+	List* temp = l;
+	List* tempN = temp->next;
+	while (tempN)
+	{
+		if (tempN->p.id == counter)
+		{
+			List* tmpId;
+			for (tmpId = tempN; tmpId; tmpId = tmpId->next)
+			{
+				tmpId->p.id--;
+			}
+			temp->next = tempN->next;
+			delete tempN;
+			break;
+		}
+		temp = temp->next;
+		tempN = tempN->next;
+	}
+	cout << "Элемент " << counter << " удалён." << endl;
+	system("pause");
+}			
+List* DelLastStudent(List* l, List* r,int* id)
+{
+	if (!r) { cout << "Список пуст!" << endl; system("pause"); return r; }
+
+	(*id)--;
+	for (r = l; r->next->next; r = r->next);
+
+	List* temp = r->next;
+	r->next = 0;
+	delete temp;
+
+	cout << "Последний элемент списка удалён." << endl;
+	system("pause");
+	return l;
+}
+
 void ShowMenu(int iItem)
 {
 	keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
 	keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
 	keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
 	keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+
 	system("cls");
 	cout << "\x1b[32mДобро пожаловать!\x1b[0m" << endl;
 	printf("%s 1 - Начальное создание таблицы\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
@@ -311,6 +424,7 @@ void MenuSearch(int iItem)
 	printf("%s  7 - Выйти из меню\n", iItem == 7 ? "\x1b[34m-->\x1b[0m" : " ");
 	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВЛЕВО!\n\x1b[0m");
 }
+
 void Print(List* l)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
@@ -322,170 +436,13 @@ void Print(List* l)
 		cout
 			<< temp->p.id
 			<< " " << temp->p.сodeGr
-			<< "   " << temp->p.surname
+			<< " " << temp->p.surname
 			<< " " << temp->p.year
 			<< " " << temp->p.sHours
 			<< " " << temp->p.jHours << endl;
 		temp = temp->next;
 	}
 	system("pause");
-}
-List* AddStudent(List* l, List* r, int* counter)
-{
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
-
-	while (1)
-	{
-		List* temp = new List;
-		Inf a;
-		cout << "Введите данные о студенте: " << endl;
-		cout << "Нажмите *, чтобы прекратить." << endl;
-		string c;
-		cin >> c;
-		if (c == "*") break;
-		cout << "=======================================" << endl;
-		cout << "Код группы: "; cin.get(); getline(cin, a.сodeGr);
-		cout << "Фамилия: "; getline(cin, a.surname);
-		cout << "Год рождения: "; cin >> a.year;
-		cout << "Введите пол (М - 1, Ж - 0): ";
-		int g = 1;
-		cin >> g;
-		if (g == 1) a.gender = true;
-		else a.gender = false;
-		cout << "Кол-во пропущенных часов: "; cin >> a.sHours;
-		cout << "Кол-во оправданных часов: "; cin >> a.jHours;
-		a.id = ++(*counter);
-		temp->p = a;
-		temp->next = 0;
-		r->next = temp;
-		r = temp;
-	}
-	return r;
-}
-List* DelFirstStudent(List* l, int* id)
-{
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
-
-	List* temp = l;
-	l = l->next;
-	delete temp;
-
-	List* tmpId;
-	for (tmpId = l; tmpId; tmpId = tmpId->next)
-	{
-		tmpId->p.id--;
-	}
-	cout << "Первый элемент списка удалён." << endl;
-	system("pause");
-	return l;
-}
-void DelStudent(List* l, int counter, int* id)
-{
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Список пуст!" << endl; system("pause"); return; }
-
-	List* temp = l;
-	List* tempN = temp->next;
-	while (tempN)
-	{
-		if (tempN->p.id == counter)
-		{
-			temp->next = tempN->next;
-			delete tempN;
-			break;
-		}
-		temp = temp->next;
-		tempN = tempN->next;
-	}
-
-	List* tmpId;
-	for (tmpId = l; tmpId; tmpId = tmpId->next)
-	{
-		tmpId->p.id--;
-	}
-	cout << "Элемент " << counter << " удалён." << endl;
-	system("pause");
-}
-List* DelLastStudent(List* l, List* r)
-{
-	if (!r) { cout << "Список пуст!" << endl; system("pause"); return r; }
-
-	for (r = l; r->next->next; r = r->next);
-
-	List* temp = r->next;
-	r->next = 0;
-	delete temp;
-
-	cout << "Последний элемент списка удалён." << endl;
-	system("pause");
-	return l;
-}
-int WriteFile(const string filename, List* l)
-{
-	ofstream fout(filename, ios::out);
-
-	if (!fout.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
-
-	List* temp = l;
-
-	while (temp)
-	{
-		fout
-			<< temp->p.id << endl
-			<< temp->p.surname << endl
-			<< temp->p.year << endl
-			<< temp->p.сodeGr << endl
-			<< temp->p.gender << endl
-			<< temp->p.sHours << endl
-			<< temp->p.jHours << endl;
-
-		temp = temp->next;
-	}
-	cout << "Данные записаны в файл " << filename << " ." << endl;
-	system("pause");
-	return 0;
-}
-int ReadFile(const string filename, List** l, List** r)
-{
-	ifstream fin(filename, ios::in);
-
-	if (!fin.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
-
-	*l = 0;
-	Inf a;
-
-	while (fin >> a.id)
-	{
-		fin
-			>> a.surname
-			>> a.year
-			>> a.сodeGr
-			>> a.gender
-			>> a.sHours
-			>> a.jHours;
-
-		if (*l) { *r = AddS(*r, a); }
-		else { *l = AddNS(a); *r = *l; }
-	}
-	cout << "Данные загружены из файла " << filename << " ." << endl;
-	system("pause");
-	return 0;
-}
-List* AddNS(Inf a)
-{
-	List* temp = new List;
-	temp->p = a;
-	temp->next = 0;
-	return temp;
-}
-List* AddS(List* r, Inf a)
-{
-	List* temp = new List;
-	temp->p = a;
-	temp->next = 0;
-	r->next = temp;
-	r = temp;
-	return r;
 }
 void PrintBySur(List* l, string surname)
 {
@@ -511,6 +468,106 @@ void PrintBySur(List* l, string surname)
 	}
 	system("pause");
 }
+void PrintById(List* l, int id)
+{
+	cout << "№ Код Фам. Год Часы(пр/опр)" << endl;
+	List* temp = l;
+	while (temp)
+	{
+		if (temp->p.id == id)
+		{
+			cout
+				<< temp->p.id
+				<< " " << temp->p.сodeGr
+				<< "   " << temp->p.surname
+				<< " " << temp->p.year
+				<< " " << temp->p.sHours
+				<< " " << temp->p.jHours << endl;
+			return;
+		}
+		temp = temp->next;
+	}
+}
+
+int WriteFile(const string filename, List* l)
+{
+	ofstream fout(filename, ios::out);
+
+	if (!fout.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
+
+	List* temp = l;
+
+	while (temp)
+	{
+		fout
+			<< temp->p.id << endl
+			<< temp->p.surname << endl
+			<< temp->p.year << endl
+			<< temp->p.сodeGr << endl
+			<< temp->p.gender << endl
+			<< temp->p.sHours << endl
+			<< temp->p.jHours << endl;
+
+		temp = temp->next;
+	}
+	cout << "Данные записаны в файл " << filename << " ." << endl;
+	system("pause");
+	return 0;
+}
+int ReadFile(const string filename, List** l, List** r, List* end)
+{
+	ifstream fin(filename, ios::in);
+
+	if (!fin.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
+
+	if (!r)
+	{
+		*l = 0;
+		Inf a;
+		int n = 0;
+
+		while (fin >> a.id)
+		{
+			fin
+				>> a.surname
+				>> a.year
+				>> a.сodeGr
+				>> a.gender
+				>> a.sHours
+				>> a.jHours;
+
+			if (*l) { *r = AddS(*r, a); n++; }
+			else { *l = AddNS(a); *r = *l; n++; }
+		}
+		cout << "Данные загружены из файла " << filename << " ." << endl;
+		system("pause");
+		return n;
+	}
+	else
+	{
+		Inf a;
+		int forId = 0;
+		int n = 0;
+
+		while (fin >> a.id)
+		{
+			forId++;
+			a.id = end->p.id + forId;
+			fin
+				>> a.surname
+				>> a.year
+				>> a.сodeGr
+				>> a.gender
+				>> a.sHours
+				>> a.jHours;
+			*r = AddS(*r, a); n++;
+		}
+		cout << "Данные загружены из файла " << filename << " и дополнены к новому списку." << endl;
+		system("pause");
+		return n;
+	}
+}
+
 int SummJHours(List* l)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0; }
@@ -546,6 +603,7 @@ float PerSHours(List* l)
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0.0f; }
 	return ((float)SummSHours(l) / (float)SummH(l)) * 100;;
 }
+
 void CorSurname(List* l, int num)
 {
 	List* temp = l;
@@ -653,4 +711,16 @@ void CorGender(List* l, int num)
 		}
 		temp = temp->next;
 	}
+}
+
+int ClearStreamI(int integer)
+{
+	if (integer != 0) return integer;
+	cin.clear();
+	cin.ignore((numeric_limits<streamsize>::max)(), '\n');
+}
+int YearCheck(int year)
+{
+	if (year < 2021 && year > 1850) return year;
+	year = 0;
 }
