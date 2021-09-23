@@ -4,7 +4,8 @@
 #include <conio.h>
 #include <Windows.h>
 using namespace std;
-						//Информация о студенте
+
+//Информация о студенте
 struct Inf
 {
 	string сodeGr;
@@ -14,18 +15,17 @@ struct Inf
 	int sHours;
 	int jHours;
 	int id;
-};	
-						//Структура списка
+};
+//Структура списка
 struct List
 {
 	Inf p;
 	List* next;
 };
-										//Прототипы функций
+//Прототипы функций
 
-bool MenuCheck(int a);										//Валидация меню
 List* NewTable(int* counter);								//Начальное создание таблицы
-List* AddStudent(List* r, int* counter);					//Добавление в список
+List* AddStudent(List* l, List* r, int* counter);			//Добавление в список
 void Print(List* l);										//Просмотр списка
 List* DelFirstStudent(List* l, int* id);					//Удаление первого студента
 void DelStudent(List* l, int counter, int* id);				//Удаление студента по ключу
@@ -39,39 +39,56 @@ int SummJHours(List* l);									//Сумма оправданных часов 
 int SummSHours(List* l);									//Сумма неоправданных часов у студентов
 float PerSHours(List* l);									//Процент неоправданных часов
 void ClearStream();											//Чистка потока
+void ShowMenu(int iItem);									//Главное меню
+void MenuSearch(int iItem);									//Меню для корректировки полей
+void CorSurname(List* l, int num);							//Корректировка фамилии студента
+void CorYear(List* l, int num);								//Корректировка года рождения студента
+void CorGroup(List* l, int num);							//Корректировка группы студента
+void CorSHours(List* l, int num);							//Корректировка часов(пропущ.) студента
+void CorJHours(List* l, int num);							//Корректировка фамилии(оправд.) студента
+void CorGender(List* l, int num);							//Корректировка гендера студента
 
 int main()
 {
-	List* l = 0,* r = 0;
+	List* l = 0, * r = 0;
 	int id = 0;
 
 	setlocale(LC_ALL, "rus");
-	
+
+	int k = _getch();
+	cout << k << endl;
+	system("pause");
+
+	int iItem = 1;
+	int nLast = 13;
+
+	ShowMenu(iItem);
 	while (1)
 	{
-		system("cls");
-		cout << "\x1b[36mДобро пожаловать!\x1b[0m" << endl;
-		cout
-			<< " 1 -> Начальное создание таблицы" << endl
-			<< " 2 -> Просмотр таблицы" << endl
-			<< " 3 -> Добавление новой записи в таблицу" << endl
-			<< " 4 -> Удаление записи" << endl
-			<< " 5 -> Корректировка записи в таблице" << endl
-			<< " 6 -> Сортировка таблицы" << endl
-			<< " 7 -> Поиск записи в таблице" << endl
-			<< " 8 -> Сохранение таблицы в файле" << endl
-			<< " 9 -> Чтение данных из файла" << endl
-			<< "10 -> Обработка таблицы и просмотр результатов обработки" << endl
-			<< "11 -> Количество пропущенных часов(оправданных) у всех студентов" << endl
-			<< "12 -> Процент пропущенных(неоправданных) часов" << endl	
-			<< "13 -> Выход" << endl << endl
-			<< "\x1b[31mВыберите пункт меню -> \x1b[0m";
-
-		int key = 0;
-		cin >> key;
-		if (MenuCheck(key) && key <= 13 && key > 0)
+		char Key = _getch();
+		if (GetAsyncKeyState(VK_UP))
 		{
-			switch (key)
+			keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+			if (0 < iItem - 1)
+				iItem = iItem - 1;
+			else
+				iItem = nLast;
+			ShowMenu(iItem);
+		}
+		if (GetAsyncKeyState(VK_DOWN))
+		{
+			keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+			if (iItem < nLast)
+				iItem = iItem + 1;
+			else
+				iItem = 1;
+			ShowMenu(iItem);
+		}
+		if (GetAsyncKeyState(VK_RIGHT))
+		{
+			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+			ShowMenu(iItem);
+			switch (iItem)
 			{
 			case 1:
 				if (!l)
@@ -89,10 +106,11 @@ int main()
 				Print(l);
 				break;
 			case 3:
-				r = AddStudent(r, &id);
+				r = AddStudent(l, r, &id);
 				break;
 			case 4:
 			{
+				system("cls");
 				int number = 1;
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
@@ -100,24 +118,93 @@ int main()
 					cin >> number;
 					if (number <= id)
 					{
+						if (number == 1) l = DelFirstStudent(l, &id);
+						else if (number == id) r = DelLastStudent(l, r);
+						else DelStudent(l, number, &id);
 						break;
 					}
 					else
 					{
 						cout << "Нет такого номера записи!" << endl;
 						system("pause");
+						break;
 					}
 				}
-				if (number == 1) l = DelFirstStudent(l, &id);
-				else if (number == id) r = DelLastStudent(l, r);
-				else DelStudent(l, number, &id);
-				break;
 			}
+			break;
 			case 5:
+			{
+				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
+				int num = 0;
+				cin >> num;
 
-				break;
+				bool bExit = false;
+				
+				int iItem = 1;
+				int nLast = 7;
+
+				do
+				{
+					MenuSearch(iItem);
+					char Key = _getch();
+					if (Key == VK_RIGHT)
+					{
+						Key = 0;
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						break;
+					}
+					if (GetAsyncKeyState(VK_UP))
+					{
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (0 < iItem - 1)
+							iItem = iItem - 1;
+						else
+							iItem = nLast;
+						MenuSearch(iItem);
+					}
+					if (GetAsyncKeyState(VK_DOWN))
+					{
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (iItem < nLast)
+							iItem = iItem + 1;
+						else
+							iItem = 1;
+						MenuSearch(iItem);
+					}
+					if (GetAsyncKeyState(VK_LEFT))
+					{
+						keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						MenuSearch(iItem);
+						switch (iItem)
+						{
+						case 1:
+							CorSurname(l, num);
+							break;
+						case 2:
+							CorYear(l, num);
+							break;
+						case 3:
+							CorGroup(l, num);
+							break;
+						case 4:
+							CorJHours(l, num);
+							break;
+						case 5:
+							CorSHours(l, num);
+							break;
+						case 6:
+							CorGender(l, num);
+							break;
+						case 7:
+							bExit = true;
+						}
+					}
+				} while (!bExit);
+				Sleep(2000);
+			}
+			break;
 			case 6:
-
+				//Сортировка 
 				break;
 			case 7:
 			{
@@ -125,24 +212,24 @@ int main()
 				string surname = "";
 				cin >> surname;
 				PrintBySur(l, surname);
-				break;
 			}
+			break;
 			case 8:
 			{
 				cout << "Введите название файла и его расширение: ";
 				string filename = "";
 				cin >> filename;
 				WriteFile(filename, l);
-				break;
 			}
+			break;
 			case 9:
 			{
 				cout << "Введите название файла и его расширение: ";
 				string filename = "";
 				cin >> filename;
 				ReadFile(filename, &l, &r);
-				break;
 			}
+			break;
 			case 10:
 
 				break;
@@ -158,19 +245,9 @@ int main()
 				return 0;
 			}
 		}
-		else
-		{
-			ClearStream();
-			cout << "Выберите пункт из списка!" << endl;
-			system("pause");
-		}
 	}
 }
 
-bool MenuCheck(int a)
-{
-	return (a != 0) ? 1 : 0;
-}
 void ClearStream()
 {
 	cin.clear();
@@ -182,28 +259,67 @@ List* NewTable(int* counter)
 	Inf a;
 	cout << "Введите данные о студенте: " << endl;
 	cout << "=======================================" << endl;
-	cout << "Код группы: "; cin.get(); getline(cin, a.сodeGr);
+	cout << "Код группы: "; getline(cin, a.сodeGr);
 	cout << "Фамилия: "; getline(cin, a.surname);
 	cout << "Год рождения: "; cin >> a.year;
+	cout << "Введите пол (М - 1, Ж - 0): ";
+	int g = 1;
+	cin >> g;
+	if (g == 1) a.gender = true;
+	else a.gender = false;
 	cout << "Количество пропущенных часов: "; cin >> a.sHours;
 	cout << "Количество оправданных часов: "; cin >> a.jHours;
-	cout << "Введите пол (М - 1, Ж - 0): ";
 	a.id = ++(*counter);
-	a.gender = true;
 	l->p = a;
 	l->next = 0;
-	
+
 	return l;
+}
+void ShowMenu(int iItem)
+{
+	keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+	keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+	keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+	keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+	system("cls");
+	cout << "\x1b[32mДобро пожаловать!\x1b[0m" << endl;
+	printf("%s 1 - Начальное создание таблицы\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 2 - Просмотр таблицы\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 3 - Добавление новой записи в таблицу\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 4 - Удаление записи\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 5 - Корректировка записи в таблице\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 6 - Сортировка таблицы\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 7 - Поиск записи в таблице\n", iItem == 7 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 8 - Сохранение таблицы в файле\n", iItem == 8 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s 9 - Чтение данных из файла\n", iItem == 9 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s10 - Обработка таблицы и просмотр результатов обработки\n", iItem == 10 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s11 - Количество пропущенных часов(оправданных) у всех студентов\n", iItem == 11 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s12 - Процент пропущенных(неоправданных) часов\n", iItem == 12 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s13 - Выход\n", iItem == 13 ? "\x1b[33m--->\x1b[0m" : " ");
+	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВПРАВО!\n\x1b[0m");
+}
+void MenuSearch(int iItem)
+{
+	system("cls");
+	cout << "\x1b[32mВыберите поле для редактирования: \x1b[0m" << endl;
+	printf("%s  1 - Фамилия\n", iItem == 1 ? "\x1b[33m>>\x1b[0m" : " ");
+	printf("%s  2 - Год рождения\n", iItem == 2 ? "\x1b[33m>>\x1b[0m" : " ");
+	printf("%s  3 - Шифр группы\n", iItem == 3 ? "\x1b[33m>>\x1b[0m" : " ");
+	printf("%s  4 - Количество пропущенных часов (оправданных)\n", iItem == 4 ? "\x1b[33m>>\x1b[0m" : " ");
+	printf("%s  5 - Количество пропущенных часов (неоправданных)\n", iItem == 5 ? "\x1b[33m>>\x1b[0m" : " ");
+	printf("%s  6 - Пол\n", iItem == 6 ? "\x1b[33m>>\x1b[0m" : " ");
+	printf("%s  7 - Выйти из меню\n", iItem == 7 ? "\x1b[34m-->\x1b[0m" : " ");
+	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВЛЕВО!\n\x1b[0m");
 }
 void Print(List* l)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	
+
 	List* temp = l;
 	cout << "№ Код Фам. Год Часы(пр/опр)" << endl;
 	while (temp)
 	{
-		cout 
+		cout
 			<< temp->p.id
 			<< " " << temp->p.сodeGr
 			<< "   " << temp->p.surname
@@ -214,8 +330,10 @@ void Print(List* l)
 	}
 	system("pause");
 }
-List* AddStudent(List* r, int* counter)
+List* AddStudent(List* l, List* r, int* counter)
 {
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
+
 	while (1)
 	{
 		List* temp = new List;
@@ -229,7 +347,11 @@ List* AddStudent(List* r, int* counter)
 		cout << "Код группы: "; cin.get(); getline(cin, a.сodeGr);
 		cout << "Фамилия: "; getline(cin, a.surname);
 		cout << "Год рождения: "; cin >> a.year;
-		a.gender = true;
+		cout << "Введите пол (М - 1, Ж - 0): ";
+		int g = 1;
+		cin >> g;
+		if (g == 1) a.gender = true;
+		else a.gender = false;
 		cout << "Кол-во пропущенных часов: "; cin >> a.sHours;
 		cout << "Кол-во оправданных часов: "; cin >> a.jHours;
 		a.id = ++(*counter);
@@ -261,7 +383,7 @@ void DelStudent(List* l, int counter, int* id)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
 	if (!l->next) { cout << "Список пуст!" << endl; system("pause"); return; }
-	
+
 	List* temp = l;
 	List* tempN = temp->next;
 	while (tempN)
@@ -289,7 +411,7 @@ List* DelLastStudent(List* l, List* r)
 	if (!r) { cout << "Список пуст!" << endl; system("pause"); return r; }
 
 	for (r = l; r->next->next; r = r->next);
-	
+
 	List* temp = r->next;
 	r->next = 0;
 	delete temp;
@@ -335,7 +457,7 @@ int ReadFile(const string filename, List** l, List** r)
 	while (fin >> a.id)
 	{
 		fin
-			>> a.surname 
+			>> a.surname
 			>> a.year
 			>> a.сodeGr
 			>> a.gender
@@ -364,7 +486,7 @@ List* AddS(List* r, Inf a)
 	r->next = temp;
 	r = temp;
 	return r;
-}	
+}
 void PrintBySur(List* l, string surname)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
@@ -423,4 +545,112 @@ float PerSHours(List* l)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0.0f; }
 	return ((float)SummSHours(l) / (float)SummH(l)) * 100;;
+}
+void CorSurname(List* l, int num)
+{
+	List* temp = l;
+	string surname = "";
+	while (temp)
+	{
+		if (temp->p.id == num)
+		{
+			cout << "Введите новую фамилию для студента: ";
+			cin >> surname;
+			temp->p.surname = surname;
+			cout << "Фамилия изменена на " << surname << endl;
+			system("pause");
+			break;
+		}
+		temp = temp->next;
+	}
+}
+void CorYear(List* l, int num)
+{
+	List* temp = l;
+	int age = 0;
+	while (temp)
+	{
+		if (temp->p.id == num)
+		{
+			cout << "Введите новый год рождения для студента: ";
+			cin >> age;
+			temp->p.year = age;
+			cout << "Год изменен на " << age << endl;
+			system("pause");
+			break;
+		}
+		temp = temp->next;
+	}
+}
+void CorGroup(List* l, int num)
+{
+	List* temp = l;
+	string gr = "";
+	while (temp)
+	{
+		if (temp->p.id == num)
+		{
+			cout << "Введите новый шифр группы у студента: ";
+			cin >> gr;
+			temp->p.сodeGr = gr;
+			cout << "Шифр группы изменён на " << gr << endl;
+			system("pause");
+			break;
+		}
+		temp = temp->next;
+	}
+}
+void CorSHours(List* l, int num)
+{
+	List* temp = l;
+	int sH = 0;
+	while (temp)
+	{
+		if (temp->p.id == num)
+		{
+			cout << "Введите новое количество пропущенных часов у студента: ";
+			cin >> sH;
+			temp->p.sHours = sH;
+			cout << "Часы изменены на " << sH << endl;
+			system("pause");
+			break;
+		}
+		temp = temp->next;
+	}
+}
+void CorJHours(List* l, int num)
+{
+	List* temp = l;
+	int sH = 0;
+	while (temp)
+	{
+		if (temp->p.id == num)
+		{
+			cout << "Введите новое количество пропущенных часов у студента: ";
+			cin >> sH;
+			temp->p.jHours = sH;
+			cout << "Часы изменены на " << sH << endl;
+			system("pause");
+			break;
+		}
+		temp = temp->next;
+	}
+}
+void CorGender(List* l, int num)
+{
+	List* temp = l;
+	int gender;
+	while (temp)
+	{
+		if (temp->p.id == num)
+		{
+			cout << "Введите другой пол студента (1 - М, 0 - Ж): ";
+			cin >> gender;
+			temp->p.gender = gender;
+			cout << "Фамилия изменена на " << gender << endl;
+			system("pause");
+			break;
+		}
+		temp = temp->next;
+	}
 }
