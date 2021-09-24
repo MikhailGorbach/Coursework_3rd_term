@@ -3,8 +3,9 @@
 #include <string>
 #include <fstream>
 #include <conio.h>
+#include <iomanip>
 using namespace std;
-					//Информация о студенте
+//Информация о студенте
 struct Inf
 {
 	string сodeGr;
@@ -15,14 +16,14 @@ struct Inf
 	int jHours;
 	int id;
 };
-					//Структура списка
+//Структура списка
 struct List
 {
 	Inf p;
 	List* next;
 };
-					//Прототипы функций
-									//Создание списка
+//Прототипы функций
+//Создание списка
 List* NewTable(int* counter);								//Начальное создание таблицы
 List* AddStudent(List* l, List* r, int* counter);			//Добавление в список
 List* AddNS(Inf a);											//Создание первого элемента (для чтения)
@@ -34,7 +35,7 @@ List* DelLastStudent(List* l, List* r, int* id);			//Удаление после
 									//Просмотр списка
 void Print(List* l);										//Просмотр списка
 void PrintBySur(List* l, string surname);					//Просмотр списка студентов по фамилии
-void PrintById(List* l, int id);							//Просмотр списка по номеру
+int PrintById(List* l, int id);							//Просмотр списка по номеру
 									//Файл
 int WriteFile(const string filename, List* l);						//Запись данных в файл
 int ReadFile(const string filename, List** l, List** r, List* end);	//Чтение данных из файла
@@ -44,7 +45,9 @@ int SummSHours(List* l);									//Сумма неоправданных час�
 float PerSHours(List* l);									//Процент неоправданных часов
 									//Менюшки
 void ShowMenu(int iItem);									//Главное меню
-void MenuSearch(int iItem);									//Меню для корректировки полей
+void MenuSearchCor(int iItem);								//Меню для корректировки полей
+void MenuSearchSort(int iItem);								//Меню для сортировки полей
+void ShowExit(int iItem);
 									//Проверки
 void ClearStream();											//Чистка потока
 int YearCheck(int year);
@@ -55,12 +58,20 @@ void CorGroup(List* l, int num);							//Корректировка группы
 void CorSHours(List* l, int num);							//Корректировка часов(пропущ.) студента
 void CorJHours(List* l, int num);							//Корректировка фамилии(оправд.) студента
 void CorGender(List* l, int num);							//Корректировка гендера студента
+									//Сортировки
+void SortSurToLow(List* l);									//Сортировка фамилий по убыванию
+void SortSurToHigh(List* l);								//Сортировка фамилий по возрастанию
+void SortSHoursToHigh(List* l);								//Сортировка пропущенных часов(пропущ.) по убыванию
+void SortSHoursToLow(List* l);								//Сортировка пропущенных часов(пропущ.) по возрастанию
+void SortJHoursToHigh(List* l);								//Сортировка пропущенных часов(оправд.) по возрастанию
+void SortJHoursToLow(List* l);								//Сортировка пропущенных часов(оправд.) по убыванию
+void SortYearToHigh(List* l);								//Сортировка года рождения по возрастанию
+void SortYearToLow(List* l);								//Сортировка года рождения по убыванию
+void SortGenderToLow(List* l);								//Сортировка гендера по убыванию
+void SortGenderToHigh(List* l);								//Сортировка гендера по возрастанию
 
 int main()
 {
-
-	//HANDLE hConsole; ()
-
 	List* l = 0, * r = 0;
 	int id = 0;
 
@@ -121,7 +132,6 @@ int main()
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
 				{
-					cout << id << endl;
 					cin >> number;
 					if (number <= id && number > 0)
 					{
@@ -144,19 +154,18 @@ int main()
 				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
 				int num = 0;
 				cin >> num;
-				PrintById(l, num);
-				system("pause");
+				if (PrintById(l, num)) break;
 				bool bExit = false;
 
 				int iItem1 = 1;
 				int nLast1 = 7;
 
-				do
+				while (!bExit)
 				{
-					MenuSearch(iItem1);
-					
+					MenuSearchCor(iItem1);
+
 					char Key = _getch();
-					
+
 					if (GetAsyncKeyState(VK_UP))
 					{
 						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
@@ -164,7 +173,7 @@ int main()
 							iItem1 = iItem1 - 1;
 						else
 							iItem1 = nLast1;
-						MenuSearch(iItem1);
+						MenuSearchCor(iItem1);
 					}
 					if (GetAsyncKeyState(VK_DOWN))
 					{
@@ -173,12 +182,12 @@ int main()
 							iItem1 = iItem1 + 1;
 						else
 							iItem1 = 1;
-						MenuSearch(iItem1);
+						MenuSearchCor(iItem1);
 					}
-					if (GetAsyncKeyState(VK_LEFT))
+					if (GetAsyncKeyState(VK_RIGHT))
 					{
-						keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						MenuSearch(iItem1);
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						MenuSearchCor(iItem1);
 						switch (iItem1)
 						{
 						case 1:
@@ -203,14 +212,132 @@ int main()
 							bExit = true;
 						}
 					}
-				} while (!bExit);
-				Sleep(2000);
+				}
 			}
 			iItem = 0;
+			ShowMenu(iItem);
 			break;
 			case 6:
-				//Сортировка 
-				break;
+			{
+				system("cls");
+				bool bExit = false;
+
+				int iItem1 = 1;
+				int nLast1 = 6;
+
+				cout << "\x1b[36m!Выбор по нажатию клавишы 8 или 2 и Enter!\n\x1b[0m" << endl;
+				cout
+					<< "Выберите сортировку:" << endl
+					<< "8 - по возрастанию" << endl
+					<< "2 - по убыванию" << endl;
+
+				string Check;
+				cin >> Check;
+				if (Check == "8") while (!bExit)
+				{
+					MenuSearchSort(iItem1);
+
+					char Key = _getch();
+
+					if (GetAsyncKeyState(VK_UP))
+					{
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (0 < iItem1 - 1)
+							iItem1 = iItem1 - 1;
+						else
+							iItem1 = nLast1;
+						MenuSearchSort(iItem1);
+					}
+					if (GetAsyncKeyState(VK_DOWN))
+					{
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (iItem1 < nLast1)
+							iItem1 = iItem1 + 1;
+						else
+							iItem1 = 1;
+						MenuSearchSort(iItem1);
+					}
+					if (GetAsyncKeyState(VK_RIGHT))
+					{
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						MenuSearchSort(iItem1);
+						switch (iItem1)
+						{
+						case 1:
+							SortSurToHigh(l);
+							break;
+						case 2:
+							SortYearToHigh(l);
+							break;
+						case 3:
+							SortJHoursToHigh(l);
+							break;
+						case 4:
+							SortSHoursToHigh(l);
+							break;
+						case 5:
+							SortGenderToHigh(l);
+							break;
+						case 6:
+							bExit = true;
+						}
+					}
+				}
+				else if (Check == "2") while (!bExit)
+				{
+					MenuSearchSort(iItem1);
+
+					char Key = _getch();
+
+					if (GetAsyncKeyState(VK_UP))
+					{
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (0 < iItem1 - 1)
+							iItem1 = iItem1 - 1;
+						else
+							iItem1 = nLast1;
+						MenuSearchSort(iItem1);
+					}
+					if (GetAsyncKeyState(VK_DOWN))
+					{
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (iItem1 < nLast1)
+							iItem1 = iItem1 + 1;
+						else
+							iItem1 = 1;
+						MenuSearchSort(iItem1);
+					}
+					if (GetAsyncKeyState(VK_RIGHT))
+					{
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						MenuSearchSort(iItem1);
+						switch (iItem1)
+						{
+						case 1:
+							SortSurToLow(l);
+							break;
+						case 2:
+							SortYearToLow(l);
+							break;
+						case 3:
+							SortJHoursToLow(l);
+							break;
+						case 4:
+							SortSHoursToLow(l);
+							break;
+						case 5:
+							SortGenderToLow(l);
+							break;
+						case 6:
+							bExit = true;
+						}
+					}
+				}
+				else break;
+			}
+			iItem = 0;
+			ShowMenu(iItem);
+			break;
 			case 7:
 			{
 				cout << "Введите фамилию студента для поиска: ";
@@ -236,7 +363,7 @@ int main()
 			}
 			break;
 			case 10:
-
+				//Что-то тут происходит
 				break;
 			case 11:
 				cout << "Пропущенно часов(оправданных): " << SummJHours(l) << endl;
@@ -247,12 +374,66 @@ int main()
 				system("pause");
 				break;
 			case 13:
-				return 0;
+			{
+				bool bExit = false;
+
+				int iItem1 = 1;
+				int nLast1 = 3;
+
+				while (!bExit)
+				{
+					ShowExit(iItem1);
+
+					char Key = _getch();
+
+					if (GetAsyncKeyState(VK_UP))
+					{
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (0 < iItem1 - 1)
+							iItem1 = iItem1 - 1;
+						else
+							iItem1 = nLast1;
+						ShowExit(iItem1);
+					}
+					if (GetAsyncKeyState(VK_DOWN))
+					{
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						if (iItem1 < nLast1)
+							iItem1 = iItem1 + 1;
+						else
+							iItem1 = 1;
+						ShowExit(iItem1);
+					}
+					if (GetAsyncKeyState(VK_RIGHT))
+					{
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+						ShowExit(iItem1);
+						switch (iItem1)
+						{
+						case 1:
+							return 0;
+						case 2:
+							bExit = true;
+						case 3:
+						{
+							cout << "Введите название файла и его расширение: ";
+							string filename = "";
+							cin >> filename;
+							WriteFile(filename, l);
+							return 0;
+						}
+					}
+				}
+			}
+			}
+			iItem = 0;
+			ShowMenu(iItem);
+			break;
 			}
 		}
 	}
 }
-						
+
 List* NewTable(int* counter)
 {
 	List* l = new List;
@@ -340,7 +521,7 @@ List* DelFirstStudent(List* l, int* id)
 	l = l->next;
 	delete temp;
 
-	cout << "Первый элемент списка удалён." << endl;
+	cout << "\x1b[32mПервый элемент списка удалён.\x1b[0m" << endl;
 	system("pause");
 	return l;
 }
@@ -368,10 +549,10 @@ void DelStudent(List* l, int counter, int* id)
 		temp = temp->next;
 		tempN = tempN->next;
 	}
-	cout << "Элемент " << counter << " удалён." << endl;
+	cout << "\x1b[32mЭлемент\x1b[0m " << counter << " \x1b[32mудалён.\x1b[0m" << endl;
 	system("pause");
-}			
-List* DelLastStudent(List* l, List* r,int* id)
+}
+List* DelLastStudent(List* l, List* r, int* id)
 {
 	if (!r) { cout << "Список пуст!" << endl; system("pause"); return r; }
 
@@ -382,18 +563,13 @@ List* DelLastStudent(List* l, List* r,int* id)
 	r->next = 0;
 	delete temp;
 
-	cout << "Последний элемент списка удалён." << endl;
+	cout << "\x1b[32mПоследний элемент списка удалён.\x1b[0m" << endl;
 	system("pause");
 	return l;
 }
 
 void ShowMenu(int iItem)
 {
-	keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-	keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-	keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-	keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-
 	system("cls");
 	cout << "\x1b[32mДобро пожаловать!\x1b[0m" << endl;
 	printf("%s 1 - Начальное создание таблицы\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
@@ -411,18 +587,39 @@ void ShowMenu(int iItem)
 	printf("%s13 - Выход\n", iItem == 13 ? "\x1b[33m--->\x1b[0m" : " ");
 	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВПРАВО!\n\x1b[0m");
 }
-void MenuSearch(int iItem)
+void MenuSearchCor(int iItem)
 {
 	system("cls");
 	cout << "\x1b[32mВыберите поле для редактирования: \x1b[0m" << endl;
-	printf("%s  1 - Фамилия\n", iItem == 1 ? "\x1b[33m>>\x1b[0m" : " ");
-	printf("%s  2 - Год рождения\n", iItem == 2 ? "\x1b[33m>>\x1b[0m" : " ");
+	printf("%s  1 - Фамилия\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  2 - Год рождения\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
 	printf("%s  3 - Шифр группы\n", iItem == 3 ? "\x1b[33m>>\x1b[0m" : " ");
-	printf("%s  4 - Количество пропущенных часов (оправданных)\n", iItem == 4 ? "\x1b[33m>>\x1b[0m" : " ");
-	printf("%s  5 - Количество пропущенных часов (неоправданных)\n", iItem == 5 ? "\x1b[33m>>\x1b[0m" : " ");
-	printf("%s  6 - Пол\n", iItem == 6 ? "\x1b[33m>>\x1b[0m" : " ");
-	printf("%s  7 - Выйти из меню\n", iItem == 7 ? "\x1b[34m-->\x1b[0m" : " ");
-	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВЛЕВО!\n\x1b[0m");
+	printf("%s  4 - Количество пропущенных часов (оправданных)\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  5 - Количество пропущенных часов (неоправданных)\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  6 - Пол\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  7 - Выйти из меню\n", iItem == 7 ? "\x1b[34m--->\x1b[0m" : " ");
+	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВПРАВО!\n\x1b[0m");
+}
+void MenuSearchSort(int iItem)
+{
+	system("cls");
+	cout << "\x1b[32mВыберите поле для сортировки: \x1b[0m" << endl;
+	printf("%s  1 - Фамилия\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  2 - Год рождения\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  3 - Количество пропущенных часов (оправданных)\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  4 - Количество пропущенных часов (неоправданных)\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  5 - Пол\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  6 - Выйти из меню\n", iItem == 6 ? "\x1b[34m--->\x1b[0m" : " ");
+	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВПРАВО!\n\x1b[0m");
+}
+void ShowExit(int iItem)
+{
+	system("cls");
+	cout << endl << "\x1b[31mВы уверены, что хотите выйти?\x1b[0m" << endl;
+	printf("%s  1 - Да\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  2 - Нет\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("%s  3 - Выйти, сохранив данные в файл\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\x1b[36m!Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВПРАВО!\n\x1b[0m");
 }
 
 void Print(List* l)
@@ -434,11 +631,17 @@ void Print(List* l)
 	while (temp)
 	{
 		cout
+			<< setw(2)
 			<< temp->p.id
+			//<< setw(1)
 			<< " " << temp->p.сodeGr
+			//<< setw(1)
 			<< " " << temp->p.surname
+			//<< setw(1)
 			<< " " << temp->p.year
+			//<< setw(1)
 			<< " " << temp->p.sHours
+			//<< setw()
 			<< " " << temp->p.jHours << endl;
 		temp = temp->next;
 	}
@@ -468,8 +671,10 @@ void PrintBySur(List* l, string surname)
 	}
 	system("pause");
 }
-void PrintById(List* l, int id)
+int PrintById(List* l, int id)
 {
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 1; }
+
 	cout << "№ Код Фам. Год Часы(пр/опр)" << endl;
 	List* temp = l;
 	while (temp)
@@ -483,7 +688,8 @@ void PrintById(List* l, int id)
 				<< " " << temp->p.year
 				<< " " << temp->p.sHours
 				<< " " << temp->p.jHours << endl;
-			return;
+			system("pause");
+			return 0;
 		}
 		temp = temp->next;
 	}
@@ -510,7 +716,7 @@ int WriteFile(const string filename, List* l)
 
 		temp = temp->next;
 	}
-	cout << "Данные записаны в файл " << filename << " ." << endl;
+	cout << "\x1b[32mДанные записаны в файле\x1b[0m" << filename << " \x1b[32m.\x1b[0m" << endl;
 	system("pause");
 	return 0;
 }
@@ -520,7 +726,7 @@ int ReadFile(const string filename, List** l, List** r, List* end)
 
 	if (!fin.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
 
-	if (!r)
+	if (!end)
 	{
 		*l = 0;
 		Inf a;
@@ -539,7 +745,7 @@ int ReadFile(const string filename, List** l, List** r, List* end)
 			if (*l) { *r = AddS(*r, a); n++; }
 			else { *l = AddNS(a); *r = *l; n++; }
 		}
-		cout << "Данные загружены из файла " << filename << " ." << endl;
+		cout << "\x1b[32mДанные загружены из файла\x1b[0m " << filename << " \x1b[32m.\x1b[0m" << endl;
 		system("pause");
 		return n;
 	}
@@ -615,7 +821,7 @@ void CorSurname(List* l, int num)
 			cout << "Введите новую фамилию для студента: ";
 			cin >> surname;
 			temp->p.surname = surname;
-			cout << "Фамилия изменена на " << surname << endl;
+			cout << "\x1b[32mФамилия изменена на\x1b[0m " << surname << endl;
 			system("pause");
 			break;
 		}
@@ -633,7 +839,7 @@ void CorYear(List* l, int num)
 			cout << "Введите новый год рождения для студента: ";
 			cin >> age;
 			temp->p.year = age;
-			cout << "Год изменен на " << age << endl;
+			cout << "\x1b[32mГод изменен на\x1b[0m " << age << endl;
 			system("pause");
 			break;
 		}
@@ -651,7 +857,7 @@ void CorGroup(List* l, int num)
 			cout << "Введите новый шифр группы у студента: ";
 			cin >> gr;
 			temp->p.сodeGr = gr;
-			cout << "Шифр группы изменён на " << gr << endl;
+			cout << "\x1b[32mШифр группы изменён на\x1b[0m " << gr << endl;
 			system("pause");
 			break;
 		}
@@ -669,7 +875,7 @@ void CorSHours(List* l, int num)
 			cout << "Введите новое количество пропущенных часов у студента: ";
 			cin >> sH;
 			temp->p.sHours = sH;
-			cout << "Часы изменены на " << sH << endl;
+			cout << "\x1b[32mЧасы изменены на\x1b[0m " << sH << endl;
 			system("pause");
 			break;
 		}
@@ -687,7 +893,7 @@ void CorJHours(List* l, int num)
 			cout << "Введите новое количество пропущенных часов у студента: ";
 			cin >> sH;
 			temp->p.jHours = sH;
-			cout << "Часы изменены на " << sH << endl;
+			cout << "\x1b[32mЧасы изменены на\x1b[0m " << sH << endl;
 			system("pause");
 			break;
 		}
@@ -705,7 +911,7 @@ void CorGender(List* l, int num)
 			cout << "Введите другой пол студента (1 - М, 0 - Ж): ";
 			cin >> gender;
 			temp->p.gender = gender;
-			cout << "Фамилия изменена на " << gender << endl;
+			cout << "\x1b[32mФамилия изменена на\x1b[0m " << gender << endl;
 			system("pause");
 			break;
 		}
@@ -723,4 +929,225 @@ int YearCheck(int year)
 {
 	if (year < 2021 && year > 1850) return year;
 	year = 0;
+}
+
+void SortSurToLow(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.surname < temp2->p.surname)
+			{
+				string sur = temp1->p.surname;
+				temp1->p.surname = temp2->p.surname;
+				temp2->p.surname = sur;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortSurToHigh(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.surname > temp2->p.surname)
+			{
+				string sur = temp1->p.surname;
+				temp1->p.surname = temp2->p.surname;
+				temp2->p.surname = sur;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortSHoursToHigh(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.sHours > temp2->p.sHours)
+			{
+				int sH = temp1->p.sHours;
+				temp1->p.sHours = temp2->p.sHours;
+				temp2->p.sHours = sH;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortSHoursToLow(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.sHours < temp2->p.sHours)
+			{
+				int sH = temp1->p.sHours;
+				temp1->p.sHours = temp2->p.sHours;
+				temp2->p.sHours = sH;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortJHoursToHigh(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.jHours > temp2->p.jHours)
+			{
+				int jH = temp1->p.jHours;
+				temp1->p.jHours = temp2->p.jHours;
+				temp2->p.jHours = jH;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortJHoursToLow(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.jHours < temp2->p.jHours)
+			{
+				int jH = temp1->p.jHours;
+				temp1->p.jHours = temp2->p.jHours;
+				temp2->p.jHours = jH;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortYearToHigh(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.year > temp2->p.year)
+			{
+				int y = temp1->p.year;
+				temp1->p.year = temp2->p.year;
+				temp2->p.year = y;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortYearToLow(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.year < temp2->p.year)
+			{
+				int y = temp1->p.year;
+				temp1->p.year = temp2->p.year;
+				temp2->p.year = y;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortGenderToHigh(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.gender > temp2->p.gender)
+			{
+				int g = temp1->p.gender;
+				temp1->p.gender = temp2->p.gender;
+				temp2->p.gender = g;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
+}
+void SortGenderToLow(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
+
+	List* temp1;
+	List* temp2;
+	for (temp1 = l; temp1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2; temp2 = temp2->next)
+		{
+			if (temp1->p.gender < temp2->p.gender)
+			{
+				int g = temp1->p.gender;
+				temp1->p.gender = temp2->p.gender;
+				temp2->p.gender = g;
+			}
+		}
+	}
+	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	system("pause");
 }
