@@ -58,6 +58,9 @@ void CorGender(List* l, int num);							//Корректировка генде�
 
 int main()
 {
+
+	//HANDLE hConsole; ()
+
 	List* l = 0, * r = 0;
 	int id = 0;
 
@@ -69,7 +72,7 @@ int main()
 	ShowMenu(iItem);
 	while (1)
 	{
-		char Key = _getch();
+		char Key1 = _getch();
 		if (GetAsyncKeyState(VK_UP))
 		{
 			keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
@@ -145,42 +148,38 @@ int main()
 				system("pause");
 				bool bExit = false;
 
-				int iItem = 1;
-				int nLast = 7;
+				int iItem1 = 1;
+				int nLast1 = 7;
 
 				do
 				{
-					MenuSearch(iItem);
+					MenuSearch(iItem1);
+					
 					char Key = _getch();
-					if (Key == VK_RIGHT)
-					{
-						Key = 0;
-						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						break;
-					}
+					
 					if (GetAsyncKeyState(VK_UP))
 					{
 						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (0 < iItem - 1)
-							iItem = iItem - 1;
+						if (0 < iItem1 - 1)
+							iItem1 = iItem1 - 1;
 						else
-							iItem = nLast;
-						MenuSearch(iItem);
+							iItem1 = nLast1;
+						MenuSearch(iItem1);
 					}
 					if (GetAsyncKeyState(VK_DOWN))
 					{
 						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (iItem < nLast)
-							iItem = iItem + 1;
+						if (iItem1 < nLast1)
+							iItem1 = iItem1 + 1;
 						else
-							iItem = 1;
-						MenuSearch(iItem);
+							iItem1 = 1;
+						MenuSearch(iItem1);
 					}
 					if (GetAsyncKeyState(VK_LEFT))
 					{
 						keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						MenuSearch(iItem);
-						switch (iItem)
+						MenuSearch(iItem1);
+						switch (iItem1)
 						{
 						case 1:
 							CorSurname(l, num);
@@ -207,6 +206,7 @@ int main()
 				} while (!bExit);
 				Sleep(2000);
 			}
+			iItem = 0;
 			break;
 			case 6:
 				//Сортировка 
