@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <conio.h>
 #include <typeinfo>
 #include <iomanip>
 using namespace std;
