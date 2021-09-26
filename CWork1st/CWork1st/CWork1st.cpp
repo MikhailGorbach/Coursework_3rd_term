@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <conio.h>
+#include <typeinfo>
 #include <iomanip>
 using namespace std;
 //Информация о студенте
@@ -49,8 +49,9 @@ void MenuSearchCor(int iItem);								//Меню для корректировк
 void MenuSearchSort(int iItem);								//Меню для сортировки полей
 void ShowExit(int iItem);
 									//Проверки
-void ClearStream();											//Чистка потока
-int YearCheck(int year);
+int CheckGender(int a);										//
+int CheckYear(int a);
+int CheckHours(int a);
 									//Корректировка
 void CorSurname(List* l, int num);							//Корректировка фамилии студента
 void CorYear(List* l, int num);								//Корректировка года рождения студента
@@ -69,8 +70,6 @@ void SortYearToHigh(List* l);								//Сортировка года рожде�
 void SortYearToLow(List* l);								//Сортировка года рождения по убыванию
 void SortGenderToLow(List* l);								//Сортировка гендера по убыванию
 void SortGenderToHigh(List* l);								//Сортировка гендера по возрастанию
-
-bool ListIsEmpty(List* l);
 
 int main()
 {
@@ -122,14 +121,15 @@ int main()
 					system("pause");
 				}
 				break;
-			case 2: //Печать таблицы
+			case 2:
 				Print(l);
 				break;
-			case 3: //Добавление студента в список
+			case 3:
 				r = AddStudent(l, r, &id);
 				break;
 			case 4:
 			{
+				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				int number = 1;
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
@@ -153,9 +153,16 @@ int main()
 			break;
 			case 5:
 			{
+				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
 				int num = 0;
 				cin >> num;
+				if (num > id)
+				{
+					cout << "Нет такого студента!" << endl;
+					system("pause");
+					break;
+				}
 				if (PrintById(l, num)) break;
 				bool bExit = false;
 
@@ -221,6 +228,9 @@ int main()
 			break;
 			case 6:
 			{
+				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); break; }
+
 				system("cls");
 				bool bExit = false;
 
@@ -342,6 +352,7 @@ int main()
 			break;
 			case 7:
 			{
+				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				cout << "Введите фамилию студента для поиска: ";
 				string surname = "";
 				cin >> surname;
@@ -373,6 +384,7 @@ int main()
 				system("pause");
 				break;
 			case 12:
+				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
 				system("pause");
 				break;
@@ -420,6 +432,7 @@ int main()
 							break;
 						case 3:
 						{
+							if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0; }
 							cout << "Введите название файла и его расширение: ";
 							string filename = "";
 							cin >> filename;
@@ -447,13 +460,16 @@ List* NewTable(int* counter)
 	cout << "Код группы: "; getline(cin, a.сodeGr);
 	cout << "Фамилия: "; getline(cin, a.surname);
 	cout << "Год рождения: "; cin >> a.year;
-	cout << "Введите пол (М - 1, Ж - 0): ";
+	a.year = CheckYear(a.year);
+	cout << "Введите пол (М - 1, Ж - 2): ";
 	int g = 1;
 	cin >> g;
-	if (g == 1) a.gender = true;
+	if (CheckGender(g) == 1) a.gender = true;
 	else a.gender = false;
 	cout << "Количество пропущенных часов: "; cin >> a.sHours;
+	a.sHours = CheckHours(a.sHours);
 	cout << "Количество оправданных часов: "; cin >> a.jHours;
+	a.jHours = CheckHours(a.jHours);
 	a.id = ++(*counter);
 	l->p = a;
 	l->next = 0;
@@ -477,13 +493,16 @@ List* AddStudent(List* l, List* r, int* counter)
 		cout << "Код группы: "; cin.get(); getline(cin, a.сodeGr);
 		cout << "Фамилия: "; getline(cin, a.surname);
 		cout << "Год рождения: "; cin >> a.year;
+		a.year = CheckYear(a.year);
 		cout << "Введите пол (М - 1, Ж - 0): ";
 		int g = 1;
 		cin >> g;
 		if (g == 1) a.gender = true;
 		else a.gender = false;
 		cout << "Кол-во пропущенных часов: "; cin >> a.sHours;
+		a.sHours = CheckHours(a.sHours);
 		cout << "Кол-во оправданных часов: "; cin >> a.jHours;
+		a.jHours = CheckHours(a.jHours);
 		a.id = r->p.id + 1;
 		(*counter)++;
 		temp->p = a;
@@ -653,8 +672,6 @@ void Print(List* l)
 }
 void PrintBySur(List* l, string surname)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-
 	List* temp = l;
 	cout
 		<< endl << "По фамилии " << surname << " найдены следующие записи:" << endl;
@@ -835,6 +852,7 @@ void CorYear(List* l, int num)
 		{
 			cout << "Введите новый год рождения для студента: ";
 			cin >> age;
+			age = CheckYear(age);
 			temp->p.year = age;
 			cout << "\x1b[32mГод изменен на\x1b[0m " << age << endl;
 			system("pause");
@@ -871,6 +889,7 @@ void CorSHours(List* l, int num)
 		{
 			cout << "Введите новое количество пропущенных часов у студента: ";
 			cin >> sH;
+			sH = CheckHours(sH);
 			temp->p.sHours = sH;
 			cout << "\x1b[32mЧасы изменены на\x1b[0m " << sH << endl;
 			system("pause");
@@ -889,6 +908,7 @@ void CorJHours(List* l, int num)
 		{
 			cout << "Введите новое количество пропущенных часов у студента: ";
 			cin >> sH;
+			sH = CheckHours(sH);
 			temp->p.jHours = sH;
 			cout << "\x1b[32mЧасы изменены на\x1b[0m " << sH << endl;
 			system("pause");
@@ -918,9 +938,6 @@ void CorGender(List* l, int num)
 
 void SortSurToLow(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -940,9 +957,6 @@ void SortSurToLow(List* l)
 }
 void SortSurToHigh(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -962,9 +976,6 @@ void SortSurToHigh(List* l)
 }
 void SortSHoursToHigh(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -984,9 +995,6 @@ void SortSHoursToHigh(List* l)
 }
 void SortSHoursToLow(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -1006,9 +1014,6 @@ void SortSHoursToLow(List* l)
 }
 void SortJHoursToHigh(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -1028,9 +1033,6 @@ void SortJHoursToHigh(List* l)
 }
 void SortJHoursToLow(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -1050,9 +1052,6 @@ void SortJHoursToLow(List* l)
 }
 void SortYearToHigh(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -1072,9 +1071,6 @@ void SortYearToHigh(List* l)
 }
 void SortYearToLow(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -1094,9 +1090,6 @@ void SortYearToLow(List* l)
 }
 void SortGenderToHigh(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -1116,9 +1109,6 @@ void SortGenderToHigh(List* l)
 }
 void SortGenderToLow(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); return; }
-
 	List* temp1;
 	List* temp2;
 	for (temp1 = l; temp1; temp1 = temp1->next)
@@ -1136,9 +1126,43 @@ void SortGenderToLow(List* l)
 	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
-
-bool ListIsEmpty(List* l)
+int CheckYear(int a)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return true; }
-	return false;
+	cout << "\x1b[31mВведите корректный год рождения.\x1b[0m" << endl;
+	string s = typeid(a).name();
+	while (!(s == "int" && a != 0 && a < 2025 && a > 1850))
+	{
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cout << "--> ";
+		cin >> a;
+	}
+	return a;
+}
+int CheckHours(int a)
+{
+	cout << "\x1b[31mВведите корректное количество часов.\x1b[0m" << endl;
+	string s = typeid(a).name();
+	while (!(s == "int" && a != 0 && a < 2000))
+	{
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cout << "--> ";
+		cin >> a;
+	}
+	return a;
+}
+int CheckGender(int a)
+{
+	cout << "\x1b[31mВведите корректный пол.\x1b[0m" << endl;
+	cout << "Введите пол (М - 1, Ж - 2)";
+	string s = typeid(a).name();
+	while (!(s == "int" && a != 0 && ((a == 1) || (a == 2))))
+	{
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+		cout << "--> ";
+		cin >> a;
+	}
+	return a;
 }
