@@ -48,10 +48,10 @@ void ShowMenu(int iItem);									//Главное меню
 void MenuSearchCor(int iItem);								//Меню для корректировки полей
 void MenuSearchSort(int iItem);								//Меню для сортировки полей
 void ShowExit(int iItem);
-//Проверки
+									//Проверки
 void ClearStream();											//Чистка потока
 int YearCheck(int year);
-//Корректировка
+									//Корректировка
 void CorSurname(List* l, int num);							//Корректировка фамилии студента
 void CorYear(List* l, int num);								//Корректировка года рождения студента
 void CorGroup(List* l, int num);							//Корректировка группы студента
@@ -373,11 +373,9 @@ int main()
 				system("pause");
 				break;
 			case 12:
-				if (ListIsEmpty(l)) break;
-			}
-			cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
-			system("pause");
-			break;
+				cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
+				system("pause");
+				break;
 			case 13:
 			{
 				bool bExit = false;
@@ -428,16 +426,16 @@ int main()
 							WriteFile(filename, l);
 							return 0;
 						}
-						}
 					}
 				}
+			}
 			}
 			iItem = 0;
 			ShowMenu(iItem);
 			break;
+			}
 		}
 	}
-}
 }
 
 List* NewTable(int* counter)
@@ -1138,6 +1136,7 @@ void SortGenderToLow(List* l)
 	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
+
 bool ListIsEmpty(List* l)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return true; }
