@@ -48,10 +48,10 @@ void ShowMenu(int iItem);									//Главное меню
 void MenuSearchCor(int iItem);								//Меню для корректировки полей
 void MenuSearchSort(int iItem);								//Меню для сортировки полей
 void ShowExit(int iItem);
-									//Проверки
+//Проверки
 void ClearStream();											//Чистка потока
 int YearCheck(int year);
-									//Корректировка
+//Корректировка
 void CorSurname(List* l, int num);							//Корректировка фамилии студента
 void CorYear(List* l, int num);								//Корректировка года рождения студента
 void CorGroup(List* l, int num);							//Корректировка группы студента
@@ -69,6 +69,8 @@ void SortYearToHigh(List* l);								//Сортировка года рожде�
 void SortYearToLow(List* l);								//Сортировка года рождения по убыванию
 void SortGenderToLow(List* l);								//Сортировка гендера по убыванию
 void SortGenderToHigh(List* l);								//Сортировка гендера по возрастанию
+
+bool ListIsEmpty(List* l);
 
 int main()
 {
@@ -366,13 +368,16 @@ int main()
 				//Что-то тут происходит
 				break;
 			case 11:
+				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				cout << "Пропущенно часов(оправданных): " << SummJHours(l) << endl;
 				system("pause");
 				break;
 			case 12:
-				cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
-				system("pause");
-				break;
+				if (ListIsEmpty(l)) break;
+			}
+			cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
+			system("pause");
+			break;
 			case 13:
 			{
 				bool bExit = false;
@@ -414,6 +419,7 @@ int main()
 							return 0;
 						case 2:
 							bExit = true;
+							break;
 						case 3:
 						{
 							cout << "Введите название файла и его расширение: ";
@@ -422,16 +428,16 @@ int main()
 							WriteFile(filename, l);
 							return 0;
 						}
+						}
 					}
 				}
-			}
 			}
 			iItem = 0;
 			ShowMenu(iItem);
 			break;
-			}
 		}
 	}
+}
 }
 
 List* NewTable(int* counter)
@@ -627,22 +633,22 @@ void Print(List* l)
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
 
 	List* temp = l;
-	cout << "№ Код Фам. Год Часы(пр/опр)" << endl;
+	cout << "| №  | Код группы |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
 	while (temp)
 	{
 		cout
-			<< setw(2)
-			<< temp->p.id
-			//<< setw(1)
-			<< " " << temp->p.сodeGr
-			//<< setw(1)
-			<< " " << temp->p.surname
-			//<< setw(1)
-			<< " " << temp->p.year
-			//<< setw(1)
-			<< " " << temp->p.sHours
-			//<< setw()
-			<< " " << temp->p.jHours << endl;
+			<< "| " << setw(2) << temp->p.id
+			<< " | " << setw(10)
+			<< temp->p.сodeGr << " | "
+			<< setw(14)
+			<< temp->p.surname << " | "
+			<< setw(4)
+			<< temp->p.year << " | "
+			<< setw(10)
+			<< temp->p.sHours << " | "
+			<< setw(13)
+			<< temp->p.jHours << " | "
+			<< setw(3) << temp->p.gender << " |" << endl;
 		temp = temp->next;
 	}
 	system("pause");
@@ -653,19 +659,18 @@ void PrintBySur(List* l, string surname)
 
 	List* temp = l;
 	cout
-		<< endl << "По фамилии " << surname << " найдены следующие записи:" << endl
-		<< "№ Код Фам. Год Часы(пр/опр)" << endl;
+		<< endl << "По фамилии " << surname << " найдены следующие записи:" << endl;
+	cout << "| №  | Код группы |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
 	while (temp)
 	{
 		if (temp->p.surname == surname)
 		{
 			cout
-				<< temp->p.id
-				<< " " << temp->p.сodeGr
-				<< "   " << temp->p.surname
-				<< " " << temp->p.year
-				<< " " << temp->p.sHours
-				<< " " << temp->p.jHours << endl;
+				<< "| " << setw(2) << temp->p.id << " | " << setw(10)
+				<< temp->p.сodeGr << " | " << setw(14) << temp->p.surname << " | "
+				<< setw(4) << temp->p.year << " | " << setw(10) << temp->p.sHours << " | "
+				<< setw(13) << temp->p.jHours << " | "
+				<< setw(3) << temp->p.gender << " |" << endl;
 		}
 		temp = temp->next;
 	}
@@ -675,19 +680,18 @@ int PrintById(List* l, int id)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 1; }
 
-	cout << "№ Код Фам. Год Часы(пр/опр)" << endl;
+	cout << "| №  | Код группы |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
 	List* temp = l;
 	while (temp)
 	{
 		if (temp->p.id == id)
 		{
 			cout
-				<< temp->p.id
-				<< " " << temp->p.сodeGr
-				<< "   " << temp->p.surname
-				<< " " << temp->p.year
-				<< " " << temp->p.sHours
-				<< " " << temp->p.jHours << endl;
+				<< "| " << setw(2) << temp->p.id << " | " << setw(10)
+				<< temp->p.сodeGr << " | " << setw(14) << temp->p.surname << " | "
+				<< setw(4) << temp->p.year << " | " << setw(10) << temp->p.sHours << " | "
+				<< setw(13) << temp->p.jHours << " | "
+				<< setw(3) << temp->p.gender << " |" << endl;
 			system("pause");
 			return 0;
 		}
@@ -776,8 +780,6 @@ int ReadFile(const string filename, List** l, List** r, List* end)
 
 int SummJHours(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0; }
-
 	int sum = 0;
 	List* temp = l;
 	while (temp)
@@ -789,8 +791,6 @@ int SummJHours(List* l)
 }
 int SummSHours(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0; }
-
 	int sum = 0;
 	List* temp = l;
 	while (temp)
@@ -806,7 +806,6 @@ int SummH(List* l)
 }
 float PerSHours(List* l)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0.0f; }
 	return ((float)SummSHours(l) / (float)SummH(l)) * 100;;
 }
 
@@ -917,18 +916,6 @@ void CorGender(List* l, int num)
 		}
 		temp = temp->next;
 	}
-}
-
-int ClearStreamI(int integer)
-{
-	if (integer != 0) return integer;
-	cin.clear();
-	cin.ignore((numeric_limits<streamsize>::max)(), '\n');
-}
-int YearCheck(int year)
-{
-	if (year < 2021 && year > 1850) return year;
-	year = 0;
 }
 
 void SortSurToLow(List* l)
@@ -1150,4 +1137,9 @@ void SortGenderToLow(List* l)
 	}
 	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
+}
+bool ListIsEmpty(List* l)
+{
+	if (!l) { cout << "Список пуст!" << endl; system("pause"); return true; }
+	return false;
 }
