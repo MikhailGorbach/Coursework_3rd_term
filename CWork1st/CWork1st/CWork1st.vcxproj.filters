@@ -13,10 +13,78 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Исходные файлы\Correct and Sort">
+      <UniqueIdentifier>{6416e104-72fa-4d18-9f9b-7379848ab8c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Create and Delete">
+      <UniqueIdentifier>{45d2e6be-f64a-4c47-8fd4-16079b10b07d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Menu and Print">
+      <UniqueIdentifier>{c363e2bc-f0bf-44cb-bba6-7336eefe8797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Check and Hours">
+      <UniqueIdentifier>{4d5792bb-2987-4a6d-a0cc-54959f2c0db7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CWork1st.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Correct.cpp">
+      <Filter>Исходные файлы\Correct and Sort</Filter>
+    </ClCompile>
+    <ClCompile Include="Sort.cpp">
+      <Filter>Исходные файлы\Correct and Sort</Filter>
+    </ClCompile>
+    <ClCompile Include="Delete.cpp">
+      <Filter>Исходные файлы\Create and Delete</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateList.cpp">
+      <Filter>Исходные файлы\Create and Delete</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Исходные файлы\Menu and Print</Filter>
+    </ClCompile>
+    <ClCompile Include="Print.cpp">
+      <Filter>Исходные файлы\Menu and Print</Filter>
+    </ClCompile>
+    <ClCompile Include="Check.cpp">
+      <Filter>Исходные файлы\Check and Hours</Filter>
+    </ClCompile>
+    <ClCompile Include="Hours.cpp">
+      <Filter>Исходные файлы\Check and Hours</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sort.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Correct.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Check.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateList.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Delete.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Print.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Hours.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
