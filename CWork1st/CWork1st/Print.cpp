@@ -71,6 +71,7 @@ int PrintById(List* l, int id)
 				<< setw(4) << temp->p.year << " | " << setw(10) << temp->p.sHours << " | "
 				<< setw(13) << temp->p.jHours << " | "
 				<< setw(3) << temp->p.gender << " |" << endl;
+			cout << " ________________________________________________________________________________ " << endl;
 			system("pause");
 			return 0;
 		}

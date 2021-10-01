@@ -39,7 +39,7 @@ int main()
 			ShowMenu(iItem);
 			switch (iItem)
 			{
-			case 1: //Создание таблицы
+			case 1:					//Создание таблицы
 				if (!l)
 				{
 					l = NewTable(&id);
@@ -51,21 +51,29 @@ int main()
 					system("pause");
 				}
 				break;
-			case 2:
+			case 2:					//Печать
 				Print(l);
 				break;
-			case 3:
+			case 3:					//Добавление нового элемента
 				r = AddStudent(l, r, &id);
 				break;
-			case 4:
+			case 4:					//Удаление элемента
 			{
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				int number = 1;
+				cout << endl;
+				printf("\x1b[36m! Для удаления всего списка нажмите 0 !\n\x1b[0m");
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
 				{
 					cin >> number;
-					if (number <= id && number > 0)
+					if (number == 0)
+					{
+						l = DelAllStudents(l, &id);
+						r = l;
+						break;
+					}
+					else if (number <= id && number > 0)
 					{
 						if (number == 1) l = DelFirstStudent(l, &id);
 						else if (number == id) r = DelLastStudent(l, r, &id);
@@ -81,7 +89,7 @@ int main()
 				}
 			}
 			break;
-			case 5:
+			case 5:					//Корректировка записи
 			{
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
@@ -165,7 +173,7 @@ int main()
 				bool bExit = false;
 
 				int iItem1 = 1;
-				int nLast1 = 6;
+				int nLast1 = 7;
 
 				cout << "\x1b[36m!Выбор по нажатию клавишы 8 или 2 и Enter!\n\x1b[0m" << endl;
 				cout
@@ -212,15 +220,18 @@ int main()
 							SortYearToHigh(l);
 							break;
 						case 3:
-							SortJHoursToHigh(l);
+							SortGroupToHigh(l);
 							break;
 						case 4:
-							SortSHoursToHigh(l);
+							SortJHoursToHigh(l);
 							break;
 						case 5:
-							SortGenderToHigh(l);
+							SortSHoursToHigh(l);
 							break;
 						case 6:
+							SortGenderToHigh(l);
+							break;
+						case 7:
 							bExit = true;
 						}
 					}
@@ -262,15 +273,18 @@ int main()
 							SortYearToLow(l);
 							break;
 						case 3:
-							SortJHoursToLow(l);
+							SortGroupToLow(l);
 							break;
 						case 4:
-							SortSHoursToLow(l);
+							SortJHoursToLow(l);
 							break;
 						case 5:
-							SortGenderToLow(l);
+							SortSHoursToLow(l);
 							break;
 						case 6:
+							SortGenderToLow(l);
+							break;
+						case 7:
 							bExit = true;
 						}
 					}

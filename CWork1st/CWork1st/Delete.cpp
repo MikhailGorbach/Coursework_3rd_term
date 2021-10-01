@@ -61,3 +61,19 @@ List* DelLastStudent(List* l, List* r, int* id)
 	system("pause");
 	return l;
 }
+List* DelAllStudents(List* l, int* id)
+{
+
+	for (l; l;)
+	{
+		(*id)--;
+		List* temp = l;
+		l = l->next;
+		delete temp;
+	}
+	l = 0;
+
+	cout << "\x1b[32mСписок удалён!\x1b[0m" << endl;
+	system("pause");
+	return l;
+}

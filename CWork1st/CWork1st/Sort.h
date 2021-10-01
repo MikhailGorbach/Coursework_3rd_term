@@ -11,3 +11,5 @@ void SortYearToHigh(List* l);								//Сортировка года рождения по возрастанию
 void SortYearToLow(List* l);								//Сортировка года рождения по убыванию
 void SortGenderToLow(List* l);								//Сортировка гендера по убыванию
 void SortGenderToHigh(List* l);								//Сортировка гендера по возрастанию
+void SortGroupToLow(List* l);								//Сортировка группы по убыванию
+void SortGroupToHigh(List* l);								//Сортировка группы по возрастанию
