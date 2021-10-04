@@ -52,7 +52,8 @@ int main()
 				}
 				break;
 			case 2:					//Печать
-				Print(l);
+				Print(l, &id);
+				iItem = 0;
 				break;
 			case 3:					//Добавление нового элемента
 				r = AddStudent(l, r, &id);
@@ -305,9 +306,13 @@ int main()
 			break;
 			case 8:
 			{
-				cout << "Введите название файла и его расширение: ";
+				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				cout
+					<< endl << "\x1b[36m!Для выхода введите *!\x1b[0m" << endl
+					<< "Введите название файла и его расширение: ";
 				string filename = "";
 				cin >> filename;
+				if (filename == "*") break;
 				WriteFile(filename, l);
 			}
 			break;

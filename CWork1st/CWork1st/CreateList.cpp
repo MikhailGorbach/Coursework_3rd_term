@@ -1,22 +1,22 @@
 #include "CreateList.h"
 #include "Check.h"
+#include <Windows.h>
 #include <fstream>
 
 List* NewTable(int* counter)
 {
 	List* l = new List;
 	Inf a;
-	cout << "Введите данные о студенте: " << endl;
-	cout << "=======================================" << endl;
+	system("cls");
+	cout << "\t\t\x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m" << endl;
 	cout << "Код группы: "; getline(cin, a.сodeGr);
 	cout << "Фамилия: "; getline(cin, a.surname);
-	cout << "Год рождения: ";
+	cout << "Год рождения";
 	CheckYear(a.year);
-	cout << "Введите пол (М - 1, Ж - 0): ";
 	CheckGender(a.gender);
-	cout << "Количество пропущенных часов: ";
+	cout << "Количество пропущенных часов";
 	CheckHours(a.sHours);
-	cout << "Количество оправданных часов: ";
+	cout << "Количество оправданных часов";
 	CheckHours(a.jHours);
 	a.id = ++(*counter);
 	l->p = a;
@@ -27,26 +27,24 @@ List* NewTable(int* counter)
 List* AddStudent(List* l, List* r, int* counter)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
-
+	system("cls");
+	cout << "\t\t\x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m" << endl;
 	while (1)
 	{
 		List* temp = new List;
 		Inf a;
-		cout << "Введите данные о студенте: " << endl;
 		cout << "Нажмите *, чтобы прекратить." << endl;
 		string c;
 		cin >> c;
 		if (c == "*") break;
-		cout << "=======================================" << endl;
 		cout << "Код группы: "; cin.get(); getline(cin, a.сodeGr);
 		cout << "Фамилия: "; getline(cin, a.surname);
-		cout << "Год рождения: ";
+		cout << "Год рождения";
 		CheckYear(a.year);
-		cout << "Введите пол (М - 1, Ж - 0): ";
 		CheckGender(a.gender);
-		cout << "Кол-во пропущенных часов: ";
+		cout << "Кол-во пропущенных часов";
 		CheckHours(a.sHours);
-		cout << "Кол-во оправданных часов: ";
+		cout << "Кол-во оправданных часов";
 		CheckHours(a.jHours);
 		a.id = r->p.id + 1;
 		(*counter)++;

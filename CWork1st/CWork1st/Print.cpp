@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <conio.h>
 
-void Print(List* l)
+void Print(List* l, int* id)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
 
@@ -12,6 +12,7 @@ void Print(List* l)
 	List* temp = l;
 	int pcounter = 0;
 	int list = 0;
+	int endlist = ((*id) % 10 == 0) ? (*id) / 10 : ((*id) / 10) + 1;
 
 	while (1)
 	{
@@ -21,20 +22,7 @@ void Print(List* l)
 		cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
 		while (temp)
 		{
-			if (pcounter == 10)
-			{
-				cout << " ________________________________________________________________________________ " << endl;
-				cout << "Страница " << list << endl;
-				system("pause");
-				pcounter = 0;
-				char key = _getch();
-				if (GetAsyncKeyState(VK_RIGHT))
-				{
-					keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-					system("cls");
-				}
-				break;
-			}
+			
 			cout
 				<< "| " << setw(2) << temp->p.id
 				<< " | " << setw(14)
@@ -50,14 +38,17 @@ void Print(List* l)
 				<< setw(3) << temp->p.gender << " |" << endl;
 			temp = temp->next;
 			pcounter++;
+			if (pcounter == 10)
+			{
+				cout << " ________________________________________________________________________________ " << endl;
+				cout << "Страница " << list << " из " << endlist << endl;
+				system("pause");
+				pcounter = 0;
+				char key = _getch();
+				break;
+			}
 		}
-		if (!temp)
-		{
-			cout << " ________________________________________________________________________________ " << endl;
-			cout << "Страница " << list << endl;
-			system("pause");
-			break;
-		}
+		if (!temp) break;
 	}
 }
 void PrintBySur(List* l, string surname)

@@ -42,6 +42,7 @@ void CheckHours(int& a)
 }
 void CheckGender(bool& a)
 {
+	cout << "Введите пол (М - 1, Ж - 0)";
 	while (1)
 	{
 		cout << "--> ";
@@ -50,7 +51,6 @@ void CheckGender(bool& a)
 		if (cin.fail() || (s == "string"))
 		{
 			cout << endl << "\x1b[31mВведите корректный пол.\x1b[0m" << endl;
-			cout << "Введите пол (М - 1, Ж - 0)";
 			cin.clear();
 			cin.ignore(INT_MAX, '\n');
 			continue;
