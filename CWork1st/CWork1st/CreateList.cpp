@@ -8,7 +8,7 @@ List* NewTable(int* counter)
 	List* l = new List;
 	Inf a;
 	system("cls");
-	cout << "\t\t\x1b[36mÂÂÅÄÈÒÅ ÄÀÍÍÛÅ Î ÑÒÓÄÅÍÒÅ\x1b[0m" << endl;
+	cout << "\t\t\x1b[36mÂÂÅÄÈÒÅ ÄÀÍÍÛÅ Î ÑÒÓÄÅÍÒÅ\x1b[0m" << endl << endl;
 	cout << "Êîä ãðóïïû: "; getline(cin, a.ñodeGr);
 	cout << "Ôàìèëèÿ: "; getline(cin, a.surname);
 	cout << "Ãîä ðîæäåíèÿ";
@@ -28,7 +28,7 @@ List* AddStudent(List* l, List* r, int* counter)
 {
 	if (!l) { cout << "Ñïèñîê ïóñò!" << endl; system("pause"); return l; }
 	system("cls");
-	cout << "\t\t\x1b[36mÂÂÅÄÈÒÅ ÄÀÍÍÛÅ Î ÑÒÓÄÅÍÒÅ\x1b[0m" << endl;
+	cout << "\t\t\x1b[36mÂÂÅÄÈÒÅ ÄÀÍÍÛÅ Î ÑÒÓÄÅÍÒÅ\x1b[0m" << endl << endl;
 	while (1)
 	{
 		List* temp = new List;
