@@ -8,16 +8,16 @@ List* NewTable(int* counter)
 	List* l = new List;
 	Inf a;
 	system("cls");
-	cout << "\t\t\x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m" << endl << endl;
-	cout << "Код группы: "; getline(cin, a.сodeGr);
-	cout << "Фамилия: "; getline(cin, a.surname);
-	cout << "Год рождения";
-	CheckYear(a.year);
-	CheckGender(a.gender);
-	cout << "Количество пропущенных часов";
-	CheckHours(a.sHours);
-	cout << "Количество оправданных часов";
-	CheckHours(a.jHours);
+	cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m\n" << endl << endl;
+	cout << " Код группы: "; getline(cin, a.сodeGr); cout << "\n";
+	cout << " Фамилия: "; getline(cin, a.surname); cout << "\n";
+	cout << " Год рождения"; 
+	CheckYear(a.year); cout << "\n";
+	CheckGender(a.gender); cout << "\n";
+	cout << " Количество пропущенных часов"; 
+	CheckHours(a.sHours); cout << "\n";
+	cout << " Количество оправданных часов";
+	CheckHours(a.jHours); cout << "\n";
 	a.id = ++(*counter);
 	l->p = a;
 	l->next = 0;
@@ -26,26 +26,27 @@ List* NewTable(int* counter)
 }
 List* AddStudent(List* l, List* r, int* counter)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
+	if (!l) { cout << " Список пуст!" << endl; system("pause"); return l; }
 	system("cls");
-	cout << "\t\t\x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m" << endl << endl;
+	cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m\n" << endl << endl;
 	while (1)
 	{
 		List* temp = new List;
 		Inf a;
-		cout << "Нажмите *, чтобы прекратить." << endl;
+		cout << " Нажмите *, чтобы прекратить." << endl;
 		string c;
+		cout << " ";
 		cin >> c;
 		if (c == "*") break;
-		cout << "Код группы: "; cin.get(); getline(cin, a.сodeGr);
-		cout << "Фамилия: "; getline(cin, a.surname);
-		cout << "Год рождения";
-		CheckYear(a.year);
-		CheckGender(a.gender);
-		cout << "Кол-во пропущенных часов";
-		CheckHours(a.sHours);
-		cout << "Кол-во оправданных часов";
-		CheckHours(a.jHours);
+		cout << " Код группы: "; cin.get(); getline(cin, a.сodeGr); cout << "\n";
+		cout << " Фамилия: "; getline(cin, a.surname); cout << "\n";
+		cout << " Год рождения";
+		CheckYear(a.year); cout << "\n";
+		CheckGender(a.gender); cout << "\n";
+		cout << " Кол-во пропущенных часов";
+		CheckHours(a.sHours); cout << "\n";
+		cout << " Кол-во оправданных часов";
+		CheckHours(a.jHours); cout << "\n";
 		a.id = r->p.id + 1;
 		(*counter)++;
 		temp->p = a;

@@ -9,10 +9,10 @@ void CorSurname(List* l, int num)
 	{
 		if (temp->p.id == num)
 		{
-			cout << "Введите новую фамилию для студента: ";
+			cout << "\nВведите новую фамилию для студента: ";
 			cin >> surname;
 			temp->p.surname = surname;
-			cout << "\x1b[32mФамилия изменена на\x1b[0m " << temp->p.surname << endl;
+			cout << "\n\x1b[32mФамилия изменена на\x1b[0m " << temp->p.surname << "\n\n";
 			system("pause");
 			break;
 		}
@@ -27,11 +27,10 @@ void CorYear(List* l, int num)
 	{
 		if (temp->p.id == num)
 		{
-			cout << "Введите новый год рождения для студента: ";
-			cin >> age;
+			cout << "\nВведите новый год рождения для студента: ";
 			CheckYear(age);
 			temp->p.year = age;
-			cout << "\x1b[32mГод изменен на\x1b[0m " << temp->p.year << endl;
+			cout << "\n\x1b[32mГод изменен на\x1b[0m " << temp->p.year << "\n\n";
 			system("pause");
 			break;
 		}
@@ -46,10 +45,10 @@ void CorGroup(List* l, int num)
 	{
 		if (temp->p.id == num)
 		{
-			cout << "Введите новую группу у студента: ";
+			cout << "\nВведите новую группу у студента: ";
 			cin >> gr;
 			temp->p.сodeGr = gr;
-			cout << "\x1b[32mКод группы изменён на\x1b[0m " << temp->p.сodeGr << endl;
+			cout << "\n\x1b[32mКод группы изменён на\x1b[0m " << temp->p.сodeGr << "\n\n";
 			system("pause");
 			break;
 		}
@@ -64,11 +63,10 @@ void CorSHours(List* l, int num)
 	{
 		if (temp->p.id == num)
 		{
-			cout << "Введите новое количество пропущенных часов у студента (неопр.): ";
-			cin >> sH;
+			cout << "\nВведите новое количество пропущенных часов у студента (неопр.): ";
 			CheckHours(sH);
 			temp->p.sHours = sH;
-			cout << "\x1b[32mЧасы изменены на\x1b[0m " << temp->p.sHours << endl;
+			cout << "\n\x1b[32mЧасы изменены на\x1b[0m " << temp->p.sHours << "\n\n";
 			system("pause");
 			break;
 		}
@@ -87,7 +85,7 @@ void CorJHours(List* l, int num)
 			cin >> sH;
 			CheckHours(sH);
 			temp->p.jHours = sH;
-			cout << "\x1b[32mЧасы изменены на\x1b[0m " << temp->p.jHours << endl;
+			cout << "\x1b[32mЧасы изменены на\x1b[0m " << temp->p.jHours << "\n\n";
 			system("pause");
 			break;
 		}
@@ -97,15 +95,15 @@ void CorJHours(List* l, int num)
 void CorGender(List* l, int num)
 {
 	List* temp = l;
-	int gender;
+	bool gender;
 	while (temp)
 	{
 		if (temp->p.id == num)
 		{
-			cout << "Введите другой пол студента (1 - М, 0 - Ж): ";
-			cin >> gender;
+			cout << "\n";
+			CheckGender(gender);
 			temp->p.gender = gender;
-			cout << "\x1b[32mФамилия изменена на\x1b[0m " << temp->p.gender << endl;
+			cout << "\n\x1b[32mФамилия изменена на\x1b[0m " << temp->p.gender << "\n\n";
 			system("pause");
 			break;
 		}

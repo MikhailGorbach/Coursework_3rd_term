@@ -9,7 +9,7 @@ void CheckYear(int& a)
 		string s = typeid(a).name();
 		if (cin.fail() || a < 1900 || a > 2025 || (s == "string"))
 		{
-			cout << "\x1b[31mВведите корректный год рождения.\x1b[0m" << endl;
+			cout << " \x1b[31mВведите корректный год рождения.\x1b[0m" << endl;
 			cin.clear();
 			cin.ignore(INT_MAX, '\n');
 			continue;
@@ -29,7 +29,7 @@ void CheckHours(int& a)
 		string s = typeid(a).name();
 		if (cin.fail() || a > 2000 || a < 0 || (s == "string"))
 		{
-			cout << endl << "\x1b[31mВведите корректное количество часов.\x1b[0m" << endl;
+			cout << endl << " \x1b[31mВведите корректное количество часов.\x1b[0m" << endl;
 			cin.clear();
 			cin.ignore(INT_MAX, '\n');
 			continue;
@@ -42,7 +42,7 @@ void CheckHours(int& a)
 }
 void CheckGender(bool& a)
 {
-	cout << "Введите пол (М - 1, Ж - 0)";
+	cout << " Введите пол (М - 1, Ж - 0)";
 	while (1)
 	{
 		cout << "--> ";
@@ -50,7 +50,7 @@ void CheckGender(bool& a)
 		string s = typeid(a).name();
 		if (cin.fail() || (s == "string"))
 		{
-			cout << endl << "\x1b[31mВведите корректный пол.\x1b[0m" << endl;
+			cout << endl << " \x1b[31mВведите корректный пол.\x1b[0m" << endl;
 			cin.clear();
 			cin.ignore(INT_MAX, '\n');
 			continue;

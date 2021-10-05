@@ -1,9 +1,19 @@
-﻿#include "List.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include "List.h"
 
 int main()
 {
+	::SendMessage(::GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_FONT_INFOEX fontInfo;
+	fontInfo.cbSize = sizeof(fontInfo);
+	GetCurrentConsoleFontEx(hConsole, TRUE, &fontInfo);
+	wcscpy(fontInfo.FaceName, L"Lucida Console");
+	fontInfo.dwFontSize.Y = 24;
+	SetCurrentConsoleFontEx(hConsole, TRUE, &fontInfo);
 
 	List* l = 0, * r = 0;
 	int id = 0;
@@ -93,6 +103,7 @@ int main()
 			case 5:					//Корректировка записи
 			{
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				system("cls");
 				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
 				int num = 0;
 				cin >> num;
@@ -176,12 +187,12 @@ int main()
 				int iItem1 = 1;
 				int nLast1 = 7;
 
-				cout << "\x1b[36m!Выбор по нажатию клавишы 8 или 2 и Enter!\n\x1b[0m" << endl;
+				cout << "\n\t\x1b[36m!Выбор по нажатию клавишы 8 или 2 и Enter!\n\x1b[0m" << endl;
 				cout
-					<< "Выберите сортировку:" << endl
-					<< "8 - по возрастанию" << endl
-					<< "2 - по убыванию" << endl;
-
+					<< "\tВыберите сортировку:\n" << endl
+					<< "\t8 - по возрастанию\n" << endl
+					<< "\t2 - по убыванию\n" << endl;
+				cout << "\t";
 				string Check;
 				cin >> Check;
 				if (Check == "8") while (!bExit)
@@ -321,7 +332,7 @@ int main()
 				cout << "Введите название файла и его расширение: ";
 				string filename = "";
 				cin >> filename;
-				id = ReadFile(filename, &l, &r, r);
+				id += ReadFile(filename, &l, &r, r);
 			}
 			break;
 			case 10:

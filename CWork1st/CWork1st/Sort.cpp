@@ -24,7 +24,7 @@ void SortSurToLow(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortSurToHigh(List* l)
@@ -51,7 +51,7 @@ void SortSurToHigh(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortSHoursToHigh(List* l)
@@ -78,7 +78,7 @@ void SortSHoursToHigh(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortSHoursToLow(List* l)
@@ -105,7 +105,7 @@ void SortSHoursToLow(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortJHoursToHigh(List* l)
@@ -132,7 +132,7 @@ void SortJHoursToHigh(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortJHoursToLow(List* l)
@@ -159,7 +159,7 @@ void SortJHoursToLow(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortYearToHigh(List* l)
@@ -186,7 +186,7 @@ void SortYearToHigh(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortYearToLow(List* l)
@@ -213,7 +213,7 @@ void SortYearToLow(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortGenderToHigh(List* l)
@@ -240,7 +240,7 @@ void SortGenderToHigh(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortGenderToLow(List* l)
@@ -267,7 +267,7 @@ void SortGenderToLow(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortGroupToLow(List* l)
@@ -294,7 +294,7 @@ void SortGroupToLow(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
 void SortGroupToHigh(List* l)
@@ -321,6 +321,6 @@ void SortGroupToHigh(List* l)
 		temp1->p.id = counter++;
 	}
 
-	cout << "\x1b[32mСортировка выполнена!\x1b[0m" << endl;
+	cout << "\n\x1b[32mСортировка выполнена!\x1b[0m" << endl;
 	system("pause");
 }
