@@ -25,6 +25,9 @@
     <Filter Include="Исходные файлы\Check and Hours">
       <UniqueIdentifier>{4d5792bb-2987-4a6d-a0cc-54959f2c0db7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Settings">
+      <UniqueIdentifier>{a31f4da3-f3df-4926-9075-6900499d5972}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CWork1st.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="Hours.cpp">
       <Filter>Исходные файлы\Check and Hours</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Исходные файлы\Settings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +90,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Hours.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

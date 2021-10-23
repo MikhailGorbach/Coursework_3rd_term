@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Check.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="Correct.cpp" />
     <ClCompile Include="CreateList.cpp" />
     <ClCompile Include="CWork1st.cpp" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Check.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="Correct.h" />
     <ClInclude Include="CreateList.h" />
     <ClInclude Include="Delete.h" />

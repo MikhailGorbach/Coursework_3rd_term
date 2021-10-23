@@ -4,7 +4,7 @@ void CheckYear(int& a)
 {
 	while (1)
 	{
-		cout << "--> ";
+		cout << " ";
 		cin >> a;
 		string s = typeid(a).name();
 		if (cin.fail() || a < 1900 || a > 2025 || (s == "string"))
@@ -24,7 +24,7 @@ void CheckHours(int& a)
 {
 	while (1)
 	{
-		cout << "--> ";
+		cout << " ";
 		cin >> a;
 		string s = typeid(a).name();
 		if (cin.fail() || a > 2000 || a < 0 || (s == "string"))
@@ -42,10 +42,10 @@ void CheckHours(int& a)
 }
 void CheckGender(bool& a)
 {
-	cout << " Введите пол (М - 1, Ж - 0)";
+	cout << " Введите пол (М - 1, Ж - 0): ";
 	while (1)
 	{
-		cout << "--> ";
+		cout << " ";
 		cin >> a;
 		string s = typeid(a).name();
 		if (cin.fail() || (s == "string"))

@@ -3,17 +3,8 @@
 
 int main()
 {
-	::SendMessage(::GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_FONT_INFOEX fontInfo;
-	fontInfo.cbSize = sizeof(fontInfo);
-	GetCurrentConsoleFontEx(hConsole, TRUE, &fontInfo);
-	wcscpy(fontInfo.FaceName, L"Lucida Console");
-	fontInfo.dwFontSize.Y = 24;
-	SetCurrentConsoleFontEx(hConsole, TRUE, &fontInfo);
+	ConsoleSettings();
+	CursorVisabilityChange(0);
 
 	List* l = 0, * r = 0;
 	int id = 0;
@@ -54,6 +45,7 @@ int main()
 				{
 					l = NewTable(&id);
 					r = l;
+					ShowMenu(iItem);
 				}
 				else
 				{
@@ -66,14 +58,18 @@ int main()
 				iItem = 0;
 				break;
 			case 3:					//Добавление нового элемента
+			{
 				r = AddStudent(l, r, &id);
+				ShowMenu(iItem);
+			}
 				break;
 			case 4:					//Удаление элемента
 			{
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				int number = 1;
 				cout << endl;
-				printf("\x1b[36m! Для удаления всего списка нажмите 0 !\n\x1b[0m");
+				printf("\x1b[36m<!--Для удаления всего списка нажмите 0 -->\n\x1b[0m");
+				CursorVisabilityChange(1);
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
 				{
@@ -98,12 +94,14 @@ int main()
 						break;
 					}
 				}
+				CursorVisabilityChange(0);
 			}
 			break;
 			case 5:					//Корректировка записи
 			{
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				system("cls");
+				CursorVisabilityChange(1);
 				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
 				int num = 0;
 				cin >> num;
@@ -173,6 +171,7 @@ int main()
 					}
 				}
 			}
+			CursorVisabilityChange(0);
 			iItem = 0;
 			ShowMenu(iItem);
 			break;
@@ -187,6 +186,7 @@ int main()
 				int iItem1 = 1;
 				int nLast1 = 7;
 
+				CursorVisabilityChange(1);
 				cout << "\n\t\x1b[36m!Выбор по нажатию клавишы 8 или 2 и Enter!\n\x1b[0m" << endl;
 				cout
 					<< "\tВыберите сортировку:\n" << endl
@@ -303,6 +303,7 @@ int main()
 				}
 				else break;
 			}
+			CursorVisabilityChange(0);
 			iItem = 0;
 			ShowMenu(iItem);
 			break;
@@ -329,10 +330,12 @@ int main()
 			break;
 			case 9:
 			{
+				CursorVisabilityChange(1);
 				cout << "Введите название файла и его расширение: ";
 				string filename = "";
 				cin >> filename;
 				id += ReadFile(filename, &l, &r, r);
+				CursorVisabilityChange(0);
 			}
 			break;
 			case 10:
@@ -390,15 +393,17 @@ int main()
 						case 3:
 						{
 							if (!l) { cout << "Список пуст!" << endl; system("pause"); return 0; }
+							CursorVisabilityChange(1);
 							cout << "Введите название файла и его расширение: ";
 							string filename = "";
 							cin >> filename;
 							WriteFile(filename, l);
+							CursorVisabilityChange(0);
 							return 0;
+						}
 						}
 					}
 				}
-			}
 			}
 			iItem = 0;
 			ShowMenu(iItem);

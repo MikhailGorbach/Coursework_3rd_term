@@ -7,15 +7,6 @@ void Print(List* l, int* id)
 {
 	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
 
-	cout << "Нажмите 1, если хотите вывести весь список" << endl;
-	string c;
-	cin >> c;
-	if (c == "1")
-	{
-		PrintAll(l, id);
-		return;
-	}
-
 	system("cls");
 
 	List* temp = l;
@@ -24,26 +15,43 @@ void Print(List* l, int* id)
 	int endlist = ((*id) % 10 == 0) ? (*id) / 10 : ((*id) / 10) + 1;
 	List* tempprev = l;
 
-	while (1)
+	list++;
+	temp = PrintTen(temp);
+	cout << " ________________________________________________________________________________ " << endl;
+	cout << "Страница " << list << " из " << endlist << endl;
+	printf("\n\n\t\x1b[36m<!--Нажмите LEFT, если хотите вывести весь список-->\n\x1b[0m");
+
+	do
 	{
 		char Key = _getch();
 		if (GetAsyncKeyState(VK_RIGHT))
 		{
 			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+			if (list == endlist)
+			{
+				list = 0;
+				temp = tempprev;
+			}
 			if (list < endlist)
 			{
 				list++;
 				temp = PrintTen(temp);
 				cout << " ________________________________________________________________________________ " << endl;
 				cout << "Страница " << list << " из " << endlist << endl;
-				system("pause");
 			}
 		}
 		if (GetAsyncKeyState(VK_DOWN))
 		{
+			keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
 			break;
 		}
-	}
+		if (GetAsyncKeyState(VK_LEFT))
+		{
+			keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
+			PrintAll(l, id);
+			return;
+		}
+	} while (1);
 }
 void PrintBySur(List* l, string surname)
 {
@@ -121,6 +129,7 @@ void PrintAll(List* l, int* id)
 	while (1)
 	{
 		system("cls");
+		printf("\t\x1b[36m<!--Управление осуществляется стрелками ВНИЗ, ВПРАВО-->\n\x1b[0m");
 		cout << " ________________________________________________________________________________" << endl;
 		cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
 		while (temp)
@@ -154,9 +163,10 @@ List* PrintTen(List* l)
 	{
 		int pcounter = 0;
 		system("cls");
+		printf("\t\x1b[36m<!--Управление осуществляется стрелками ВНИЗ, ВПРАВО-->\n\x1b[0m");
 		cout << " ________________________________________________________________________________" << endl;
 		cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
-		while (pcounter < 10)
+		while (pcounter < 10 && temp)
 		{
 			cout
 				<< "| " << setw(2) << temp->p.id << " | " << setw(14)

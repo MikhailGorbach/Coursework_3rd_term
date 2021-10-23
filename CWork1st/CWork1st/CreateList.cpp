@@ -1,51 +1,59 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "CreateList.h"
 #include "Check.h"
-#include <Windows.h>
+#include "Console.h"
 #include <fstream>
 
 List* NewTable(int* counter)
 {
+	CursorVisabilityChange(1);
 	List* l = new List;
 	Inf a;
 	system("cls");
-	cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m\n" << endl << endl;
+	cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ (* для выхода)\x1b[0m\n" << endl << endl;
 	cout << " Код группы: "; getline(cin, a.сodeGr); cout << "\n";
+	if (a.сodeGr == "*")
+	{
+		CursorVisabilityChange(0);
+		return 0;
+	}
 	cout << " Фамилия: "; getline(cin, a.surname); cout << "\n";
-	cout << " Год рождения"; 
+	cout << " Год рождения: "; 
 	CheckYear(a.year); cout << "\n";
 	CheckGender(a.gender); cout << "\n";
-	cout << " Количество пропущенных часов"; 
+	cout << " Количество пропущенных часов: "; 
 	CheckHours(a.sHours); cout << "\n";
-	cout << " Количество оправданных часов";
+	cout << " Количество оправданных часов: ";
 	CheckHours(a.jHours); cout << "\n";
 	a.id = ++(*counter);
 	l->p = a;
 	l->next = 0;
-
+	CursorVisabilityChange(0);
 	return l;
 }
 List* AddStudent(List* l, List* r, int* counter)
 {
 	if (!l) { cout << " Список пуст!" << endl; system("pause"); return l; }
-	system("cls");
-	cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ\x1b[0m\n" << endl << endl;
+	CursorVisabilityChange(1);
 	while (1)
 	{
+		system("cls");
+		cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ (* для выхода)\x1b[0m\n" << endl << endl;
 		List* temp = new List;
 		Inf a;
-		cout << " Нажмите *, чтобы прекратить." << endl;
-		string c;
-		cout << " ";
-		cin >> c;
-		if (c == "*") break;
 		cout << " Код группы: "; cin.get(); getline(cin, a.сodeGr); cout << "\n";
+		if (a.сodeGr == "*")
+		{
+			CursorVisabilityChange(0);
+			return r;
+		}
 		cout << " Фамилия: "; getline(cin, a.surname); cout << "\n";
-		cout << " Год рождения";
+		cout << " Год рождения: ";
 		CheckYear(a.year); cout << "\n";
 		CheckGender(a.gender); cout << "\n";
-		cout << " Кол-во пропущенных часов";
+		cout << " Кол-во пропущенных часов: ";
 		CheckHours(a.sHours); cout << "\n";
-		cout << " Кол-во оправданных часов";
+		cout << " Кол-во оправданных часов: ";
 		CheckHours(a.jHours); cout << "\n";
 		a.id = r->p.id + 1;
 		(*counter)++;
@@ -54,6 +62,7 @@ List* AddStudent(List* l, List* r, int* counter)
 		r->next = temp;
 		r = temp;
 	}
+	CursorVisabilityChange(0);
 	return r;
 }
 List* AddNS(Inf a)

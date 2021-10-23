@@ -1,5 +1,4 @@
 #pragma once
-#include <Windows.h>
 #include <conio.h>
 #include "Check.h"
 #include "Sort.h"
@@ -9,3 +8,4 @@
 #include "Delete.h"
 #include "Print.h"
 #include "Hours.h"
+#include "Console.h"
