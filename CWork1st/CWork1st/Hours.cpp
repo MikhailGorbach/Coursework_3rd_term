@@ -28,5 +28,5 @@ int SummH(List* l)
 }
 float PerSHours(List* l)
 {
-	return ((float)SummSHours(l) / (float)SummH(l)) * 100;;
+	return ((float)SummSHours(l) / (float)SummH(l)) * 100;
 }

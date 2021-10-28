@@ -82,7 +82,6 @@ void CorJHours(List* l, int num)
 		if (temp->p.id == num)
 		{
 			cout << "Введите новое количество пропущенных часов у студента (опр.): ";
-			cin >> sH;
 			CheckHours(sH);
 			temp->p.jHours = sH;
 			cout << "\x1b[32mЧасы изменены на\x1b[0m " << temp->p.jHours << "\n\n";
@@ -103,7 +102,7 @@ void CorGender(List* l, int num)
 			cout << "\n";
 			CheckGender(gender);
 			temp->p.gender = gender;
-			cout << "\n\x1b[32mФамилия изменена на\x1b[0m " << temp->p.gender << "\n\n";
+			cout << "\n\x1b[32mФПол изменён на\x1b[0m " << temp->p.gender << "\n\n";
 			system("pause");
 			break;
 		}

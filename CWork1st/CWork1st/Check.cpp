@@ -1,7 +1,9 @@
 #include "Check.h"
+#include "Console.h"
 
 void CheckYear(int& a)
 {
+	CursorVisabilityChange(1);
 	while (1)
 	{
 		cout << " ";
@@ -16,12 +18,14 @@ void CheckYear(int& a)
 		}
 		else if (cin.good())
 		{
+			CursorVisabilityChange(0);
 			return;
 		}
 	}
 }
 void CheckHours(int& a)
 {
+	CursorVisabilityChange(1);
 	while (1)
 	{
 		cout << " ";
@@ -36,6 +40,7 @@ void CheckHours(int& a)
 		}
 		else if (cin.good())
 		{
+			CursorVisabilityChange(0);
 			return;
 		}
 	}
@@ -43,6 +48,7 @@ void CheckHours(int& a)
 void CheckGender(bool& a)
 {
 	cout << " Введите пол (М - 1, Ж - 0): ";
+	CursorVisabilityChange(1);
 	while (1)
 	{
 		cout << " ";
@@ -57,6 +63,7 @@ void CheckGender(bool& a)
 		}
 		else if (cin.good())
 		{
+			CursorVisabilityChange(0);
 			return;
 		}
 	}

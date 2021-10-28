@@ -38,6 +38,7 @@ void Print(List* l, int* id)
 				temp = PrintTen(temp);
 				cout << " ________________________________________________________________________________ " << endl;
 				cout << "Страница " << list << " из " << endlist << endl;
+				printf("\n\n\t\x1b[36m<!--Нажмите LEFT, если хотите вывести весь список-->\n\x1b[0m");
 			}
 		}
 		if (GetAsyncKeyState(VK_DOWN))
@@ -78,8 +79,8 @@ void PrintBySur(List* l, string surname)
 				cout
 					<< "| " << setw(2) << temp->p.id << " | " << setw(14)
 					<< temp->p.сodeGr << " | " << setw(14) << temp->p.surname << " | "
-					<< setw(4) << temp->p.year << " | " << setw(10) << temp->p.sHours << " | "
-					<< setw(13) << temp->p.jHours << " | "
+					<< setw(4) << temp->p.year << " | " << setw(10) << temp->p.jHours << " | "
+					<< setw(13) << temp->p.sHours << " | "
 					<< setw(3) << temp->p.gender << " |" << endl;
 			}
 			temp = temp->next;
@@ -163,7 +164,7 @@ List* PrintTen(List* l)
 	{
 		int pcounter = 0;
 		system("cls");
-		printf("\t\x1b[36m<!--Управление осуществляется стрелками ВНИЗ, ВПРАВО-->\n\x1b[0m");
+		printf("\n\n\t\x1b[36m<!--Управление осуществляется стрелками ВНИЗ, ВПРАВО-->\n\n\x1b[0m");
 		cout << " ________________________________________________________________________________" << endl;
 		cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
 		while (pcounter < 10 && temp)

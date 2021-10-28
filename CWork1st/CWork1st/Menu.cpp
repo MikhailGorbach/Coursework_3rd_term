@@ -1,55 +1,57 @@
 #include "Menu.h"
 
-void ShowMenu(int iItem)
+void MenuMain(int iItem)
 {
 	system("cls");
-	cout << "\n\t\t\t\t\t\x1b[32mДобро пожаловать!\n\x1b[0m" << endl;
-	printf("\t\t\t\t%s 1 - Начальное создание таблицы\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 2 - Просмотр таблицы\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 3 - Добавление новой записи в таблицу\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 4 - Удаление записи\n\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 5 - Корректировка записи в таблице\n\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 6 - Сортировка таблицы\n\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 7 - Поиск записи в таблице\n\n", iItem == 7 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 8 - Сохранение таблицы в файле\n\n", iItem == 8 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s 9 - Чтение данных из файла\n\n", iItem == 9 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s10 - Количество пропущенных часов(оправданных) у всех студентов\n\n", iItem == 10 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s11 - Процент пропущенных(неоправданных) часов\n\n", iItem == 11 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t%s12 - Выход\n\n", iItem == 12 ? "\x1b[33m--->\x1b[0m" : " ");
-	printf("\t\t\t\t\x1b[36m<!--Управление осуществляется стрелочками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\n\x1b[0m");
+	printf("\n\t\t\t\t\t\t\x1b[32mДОБРО ПОЖАЛОВАТЬ!\n\x1b[0m\n");
+	printf("\t\t\t\x1b[36m------------------------------------------------------------------------------\x1b[0m\n\n");
+	printf("\t\t\t\t\t %s Начальное создание таблицы\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Просмотр таблицы\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Добавление новой записи в таблицу\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Удаление записи\n\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Корректировка записи в таблице\x1b[0m\n\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Сортировка таблицы\n\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Поиск записи в таблице\n\n", iItem == 7 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Сохранение таблицы в файле\n\n", iItem == 8 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Чтение данных из файла\n\n", iItem == 9 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Количество пропущенных часов(оправданных) у всех студентов\n\n", iItem == 10 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s Процент пропущенных(неоправданных) часов\n\n", iItem == 11 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t %s \x1b[31mВыход\x1b[0m\n\n", iItem == 12 ? "\x1b[31m--->\x1b[0m" : " ");
+	printf("\t\t\t\x1b[36m------------------------------------------------------------------------------\x1b[0m\n\n");
+	printf("\t\t\t \x1b[36m<!--Управление осуществляется стрелками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\n\n\x1b[0m");
 }
-void MenuSearchCor(int iItem)
+void MenuCorrect(int iItem)
 {
 	system("cls");
-	cout << "\n\t\x1b[32mВыберите поле для редактирования: \x1b[0m\n" << endl;
-	printf("\t%s  1 - Фамилия\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  2 - Год рождения\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  3 - Код группы\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  4 - Количество пропущенных часов (оправданных)\n\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  5 - Количество пропущенных часов (неоправданных)\n\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  6 - Пол\n\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  7 - Выйти из меню\n\n", iItem == 7 ? "\x1b[34m--->\x1b[0m" : " ");
+	printf("\n\t\x1b[32mВыберите поле для редактирования: \x1b[0m\n\n");
+	printf("\t%s Фамилия\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Год рождения\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Код группы\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Количество пропущенных часов (по уваж. причине)\n\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Количество пропущенных часов (по неуваж. причине)\n\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Пол\n\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Выйти из меню\n\n", iItem == 7 ? "\x1b[33m--->\x1b[0m" : " ");
 	printf("\t\x1b[36m<!--Управление осуществляется стрелками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\x1b[0m");
 }
-void MenuSearchSort(int iItem)
+void MenuSort(int iItem)
 {
 	system("cls");
-	cout << "\n\t\x1b[32mВыберите поле для сортировки: \x1b[0m\n" << endl;
-	printf("\t%s  1 - Фамилия\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  2 - Год рождения\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  3 - Код группы\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  4 - Количество пропущенных часов (оправданных)\n\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  5 - Количество пропущенных часов (неоправданных)\n\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  6 - Пол\n\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  7 - Выйти из меню\n\n", iItem == 7 ? "\x1b[34m--->\x1b[0m" : " ");
+	printf("\n\t\x1b[32mВыберите поле для сортировки: \x1b[0m\n\n");
+	printf("\t%s Фамилия\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Год рождения\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Код группы\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Количество пропущенных часов (оправданных)\n\n", iItem == 4 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Количество пропущенных часов (неоправданных)\n\n", iItem == 5 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Пол\n\n", iItem == 6 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s Выйти из меню\n\n", iItem == 7 ? "\x1b[33m--->\x1b[0m" : " ");
 	printf("\t\x1b[36m<!--Управление осуществляется стрелками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\x1b[0m");
 }
-void ShowExit(int iItem)
+void MenuExit(int iItem)
 {
 	system("cls");
-	cout << endl << "\t\x1b[31mВы уверены, что хотите выйти?\x1b[0m\n" << endl;
-	printf("\t%s  1 - Да\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  2 - Нет\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t%s  3 - Выйти, сохранив данные в файл\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\x1b[36m<!--Управление осуществляется стрелками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\x1b[0m");
+	printf("\n\n\n\n\t\t\t\t\x1b[31mВы уверены, что хотите выйти?\x1b[0m\n\n\n");
+	printf("\t\t\t\t\t%s Да\n\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t%s Нет\n\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t%s Выйти, сохранив данные в файл\n\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\x1b[36m<!--Управление осуществляется стрелками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\x1b[0m");
 }

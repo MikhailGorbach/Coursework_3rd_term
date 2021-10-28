@@ -12,7 +12,7 @@ int main()
 	int iItem = 1;
 	int nLast = 12;
 
-	ShowMenu(iItem);
+	MenuMain(iItem);
 	while (1)
 	{
 		char Key1 = _getch();
@@ -23,7 +23,7 @@ int main()
 				iItem = iItem - 1;
 			else
 				iItem = nLast;
-			ShowMenu(iItem);
+			MenuMain(iItem);
 		}
 		if (GetAsyncKeyState(VK_DOWN))
 		{
@@ -32,20 +32,19 @@ int main()
 				iItem = iItem + 1;
 			else
 				iItem = 1;
-			ShowMenu(iItem);
+			MenuMain(iItem);
 		}
 		if (GetAsyncKeyState(VK_RIGHT))
 		{
 			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-			ShowMenu(iItem);
+			MenuMain(iItem);
 			switch (iItem)
 			{
 			case 1:					//Создание таблицы
 				if (!l)
 				{
-					l = NewTable(&id);
-					r = l;
-					ShowMenu(iItem);
+					l = r = NewTable(&id);
+					MenuMain(iItem);
 				}
 				else
 				{
@@ -60,15 +59,14 @@ int main()
 			case 3:					//Добавление нового элемента
 			{
 				r = AddStudent(l, r, &id);
-				ShowMenu(iItem);
+				MenuMain(iItem);
 			}
-				break;
+			break;
 			case 4:					//Удаление элемента
 			{
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				int number = 1;
-				cout << endl;
-				printf("\x1b[36m<!--Для удаления всего списка нажмите 0 -->\n\x1b[0m");
+				printf("\n\x1b[36m<!--Для удаления всего списка нажмите 0-->\n\x1b[0m");
 				CursorVisabilityChange(1);
 				cout << "Введите номер студента для удаления -> ";
 				while (1)
@@ -76,8 +74,7 @@ int main()
 					cin >> number;
 					if (number == 0)
 					{
-						l = DelAllStudents(l, &id);
-						r = l;
+						l = r = DelAllStudents(l, &id);
 						break;
 					}
 					else if (number <= id && number > 0)
@@ -102,7 +99,8 @@ int main()
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
 				system("cls");
 				CursorVisabilityChange(1);
-				cout << "Введите номер студента, у которого хотите произвести корректировку -> ";
+				cout << "\n Введите номер студента, у которого хотите произвести корректировку -> ";
+				CursorVisabilityChange(0);
 				int num = 0;
 				cin >> num;
 				if (num > id)
@@ -114,38 +112,38 @@ int main()
 				if (PrintById(l, num)) break;
 				bool bExit = false;
 
-				int iItem1 = 1;
-				int nLast1 = 7;
+				int iItem = 1;
+				int nLast = 7;
 
 				while (!bExit)
 				{
-					MenuSearchCor(iItem1);
+					MenuCorrect(iItem);
 
 					char Key = _getch();
 
 					if (GetAsyncKeyState(VK_UP))
 					{
-						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (0 < iItem1 - 1)
-							iItem1 = iItem1 - 1;
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
+						if (0 < iItem - 1)
+							iItem = iItem - 1;
 						else
-							iItem1 = nLast1;
-						MenuSearchCor(iItem1);
+							iItem = nLast;
+						MenuCorrect(iItem);
 					}
 					if (GetAsyncKeyState(VK_DOWN))
 					{
-						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (iItem1 < nLast1)
-							iItem1 = iItem1 + 1;
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
+						if (iItem < nLast)
+							iItem = iItem + 1;
 						else
-							iItem1 = 1;
-						MenuSearchCor(iItem1);
+							iItem = 1;
+						MenuCorrect(iItem);
 					}
 					if (GetAsyncKeyState(VK_RIGHT))
 					{
-						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						MenuSearchCor(iItem1);
-						switch (iItem1)
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+						MenuCorrect(iItem);
+						switch (iItem)
 						{
 						case 1:
 							CorSurname(l, num);
@@ -171,9 +169,8 @@ int main()
 					}
 				}
 			}
-			CursorVisabilityChange(0);
 			iItem = 0;
-			ShowMenu(iItem);
+			MenuMain(iItem);
 			break;
 			case 6:
 			{
@@ -181,12 +178,12 @@ int main()
 				if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); break; }
 
 				system("cls");
+				
 				bool bExit = false;
 
-				int iItem1 = 1;
-				int nLast1 = 7;
+				int iItem = 1;
+				int nLast = 7;
 
-				CursorVisabilityChange(1);
 				cout << "\n\t\x1b[36m!Выбор по нажатию клавишы 8 или 2 и Enter!\n\x1b[0m" << endl;
 				cout
 					<< "\tВыберите сортировку:\n" << endl
@@ -195,35 +192,36 @@ int main()
 				cout << "\t";
 				string Check;
 				cin >> Check;
-				if (Check == "8") while (!bExit)
+				if (Check == "8")
+				while (!bExit)
 				{
-					MenuSearchSort(iItem1);
+					MenuSort(iItem);
 
 					char Key = _getch();
 
 					if (GetAsyncKeyState(VK_UP))
 					{
-						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (0 < iItem1 - 1)
-							iItem1 = iItem1 - 1;
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
+						if (0 < iItem - 1)
+							iItem = iItem - 1;
 						else
-							iItem1 = nLast1;
-						MenuSearchSort(iItem1);
+							iItem = nLast;
+						MenuSort(iItem);
 					}
 					if (GetAsyncKeyState(VK_DOWN))
 					{
-						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (iItem1 < nLast1)
-							iItem1 = iItem1 + 1;
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
+						if (iItem < nLast)
+							iItem = iItem + 1;
 						else
-							iItem1 = 1;
-						MenuSearchSort(iItem1);
+							iItem = 1;
+						MenuSort(iItem);
 					}
 					if (GetAsyncKeyState(VK_RIGHT))
 					{
-						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						MenuSearchSort(iItem1);
-						switch (iItem1)
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+						MenuSort(iItem);
+						switch (iItem)
 						{
 						case 1:
 							SortSurToHigh(l);
@@ -248,35 +246,36 @@ int main()
 						}
 					}
 				}
-				else if (Check == "2") while (!bExit)
+				else if (Check == "2")
+				while (!bExit)
 				{
-					MenuSearchSort(iItem1);
+					MenuSort(iItem);
 
 					char Key = _getch();
 
 					if (GetAsyncKeyState(VK_UP))
 					{
-						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (0 < iItem1 - 1)
-							iItem1 = iItem1 - 1;
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
+						if (0 < iItem - 1)
+							iItem = iItem - 1;
 						else
-							iItem1 = nLast1;
-						MenuSearchSort(iItem1);
+							iItem = nLast;
+						MenuSort(iItem);
 					}
 					if (GetAsyncKeyState(VK_DOWN))
 					{
-						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (iItem1 < nLast1)
-							iItem1 = iItem1 + 1;
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
+						if (iItem < nLast)
+							iItem = iItem + 1;
 						else
-							iItem1 = 1;
-						MenuSearchSort(iItem1);
+							iItem = 1;
+						MenuSort(iItem);
 					}
 					if (GetAsyncKeyState(VK_RIGHT))
 					{
-						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						MenuSearchSort(iItem1);
-						switch (iItem1)
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+						MenuSort(iItem);
+						switch (iItem)
 						{
 						case 1:
 							SortSurToLow(l);
@@ -303,13 +302,13 @@ int main()
 				}
 				else break;
 			}
-			CursorVisabilityChange(0);
 			iItem = 0;
-			ShowMenu(iItem);
+			MenuMain(iItem);
 			break;
 			case 7:
 			{
 				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+
 				cout << "Введите фамилию студента для поиска: ";
 				string surname = "";
 				cin >> surname;
@@ -352,38 +351,38 @@ int main()
 			{
 				bool bExit = false;
 
-				int iItem1 = 1;
-				int nLast1 = 3;
+				int iItem = 1;
+				int nLast = 3;
 
 				while (!bExit)
 				{
-					ShowExit(iItem1);
+					MenuExit(iItem);
 
 					char Key = _getch();
 
 					if (GetAsyncKeyState(VK_UP))
 					{
-						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (0 < iItem1 - 1)
-							iItem1 = iItem1 - 1;
+						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
+						if (0 < iItem - 1)
+							iItem = iItem - 1;
 						else
-							iItem1 = nLast1;
-						ShowExit(iItem1);
+							iItem = nLast;
+						MenuExit(iItem);
 					}
 					if (GetAsyncKeyState(VK_DOWN))
 					{
-						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						if (iItem1 < nLast1)
-							iItem1 = iItem1 + 1;
+						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
+						if (iItem < nLast)
+							iItem = iItem + 1;
 						else
-							iItem1 = 1;
-						ShowExit(iItem1);
+							iItem = 1;
+						MenuExit(iItem);
 					}
 					if (GetAsyncKeyState(VK_RIGHT))
 					{
-						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
-						ShowExit(iItem1);
-						switch (iItem1)
+						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+						MenuExit(iItem);
+						switch (iItem)
 						{
 						case 1:
 							return 0;
@@ -406,7 +405,7 @@ int main()
 				}
 			}
 			iItem = 0;
-			ShowMenu(iItem);
+			MenuMain(iItem);
 			break;
 			}
 		}
