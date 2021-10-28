@@ -3,9 +3,9 @@
 #include <Windows.h>
 #include <conio.h>
 
-void Print(List* l, int* id)
+void Print(List* l, int* id, int* iItem)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return; }
 
 	system("cls");
 
@@ -53,6 +53,7 @@ void Print(List* l, int* id)
 			return;
 		}
 	} while (1);
+	(*iItem) = 0;
 }
 void PrintBySur(List* l, string surname)
 {

@@ -15,7 +15,7 @@ int main()
 	MenuMain(iItem);
 	while (1)
 	{
-		char Key1 = _getch();
+		char Key = _getch();
 		if (GetAsyncKeyState(VK_UP))
 		{
 			keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
@@ -48,30 +48,32 @@ int main()
 				}
 				else
 				{
-					cout << "Таблица уже создана!" << endl;
+					cout << "\t\x1b[31mТаблица уже создана!\x1b[0m" << endl << "\t";
 					system("pause");
 				}
 				break;
 			case 2:					//Печать
-				Print(l, &id);
-				iItem = 0;
+				Print(l, &id, &iItem);
+				MenuMain(iItem);
 				break;
 			case 3:					//Добавление нового элемента
 			{
 				r = AddStudent(l, r, &id);
-				MenuMain(iItem);
 			}
+			MenuMain(iItem);
 			break;
 			case 4:					//Удаление элемента
 			{
-				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
+				system("cls");
 				int number = 1;
-				printf("\n\x1b[36m<!--Для удаления всего списка нажмите 0-->\n\x1b[0m");
+				printf("\n\t\x1b[36m<!--Для удаления всего списка нажмите 0-->\n\n\x1b[0m");
 				CursorVisabilityChange(1);
-				cout << "Введите номер студента для удаления -> ";
+				cout << "\tВведите номер студента для удаления -> ";
 				while (1)
 				{
 					cin >> number;
+					cout << "\n";
 					if (number == 0)
 					{
 						l = r = DelAllStudents(l, &id);
@@ -86,26 +88,27 @@ int main()
 					}
 					else
 					{
-						cout << "Нет такого номера записи!" << endl;
+						cout << "\t\x1b[31mНет такого номера записи!\x1b[0m" << endl << "\n\t";
 						system("pause");
 						break;
 					}
 				}
+				iItem = 0;
 				CursorVisabilityChange(0);
 			}
 			break;
 			case 5:					//Корректировка записи
 			{
-				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 				system("cls");
 				CursorVisabilityChange(1);
-				cout << "\n Введите номер студента, у которого хотите произвести корректировку -> ";
+				cout << "\n\tВведите номер студента, у которого хотите произвести корректировку -> ";
 				CursorVisabilityChange(0);
 				int num = 0;
 				cin >> num;
 				if (num > id)
 				{
-					cout << "Нет такого студента!" << endl;
+					cout << "\n\t\x1b[31mНет такого студента!\x1b[0m" << endl << "\n\t";
 					system("pause");
 					break;
 				}
@@ -174,8 +177,8 @@ int main()
 			break;
 			case 6:
 			{
-				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
-				if (!l->next) { cout << "Недостаточно элементов для сортировки!" << endl; system("pause"); break; }
+				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
+				if (!l) { cout << "\t\x1b[31mНедостаточно элементов сортировки.\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 
 				system("cls");
 				
@@ -307,7 +310,7 @@ int main()
 			break;
 			case 7:
 			{
-				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 
 				cout << "Введите фамилию студента для поиска: ";
 				string surname = "";
@@ -317,33 +320,66 @@ int main()
 			break;
 			case 8:
 			{
-				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
-				cout
-					<< endl << "\x1b[36m!Для выхода введите *!\x1b[0m" << endl
-					<< "Введите название файла и его расширение: ";
-				string filename = "";
-				cin >> filename;
-				if (filename == "*") break;
-				WriteFile(filename, l);
+				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
+				system("cls");
+				CursorVisabilityChange(1);
+				while (1)
+				{
+					cout
+						<< endl << "\n\t\x1b[36m<!--Для выхода введите *-->\x1b[0m\n" << endl
+						<< "\tВведите название файла и его расширение: ";
+					string filename = "";
+					cin >> filename;
+					CursorVisabilityChange(0);
+					if (filename == "*") break;
+					else if (filename.size() < 3)
+					{
+						cout << "\n\t\x1b[31mНеправильное имя файла\x1b[0m\n" << endl;
+						cout << "\t";
+						system("pause");
+						break;
+					}
+					WriteFile(filename, l);
+					break;
+				}
 			}
+			iItem = 0;
+			MenuMain(iItem);
 			break;
 			case 9:
 			{
+				system("cls");
 				CursorVisabilityChange(1);
-				cout << "Введите название файла и его расширение: ";
-				string filename = "";
-				cin >> filename;
-				id += ReadFile(filename, &l, &r, r);
-				CursorVisabilityChange(0);
+				while (1)
+				{
+					cout
+						<< endl << "\n\t\x1b[36m<!--Для выхода введите *-->\x1b[0m\n" << endl;
+					cout << "\tВведите название файла и его расширение: ";
+					string filename = "";
+					cin >> filename;
+					CursorVisabilityChange(0);
+					if (filename == "*") break;
+					else if (filename.size() < 3)
+					{
+						cout << "\n\t\x1b[31mНеправильное имя файла\x1b[0m\n" << endl;
+						cout << "\t";
+						system("pause");
+						break;
+					}
+					id += ReadFile(filename, &l, &r, r);
+					break;
+				}
 			}
+			iItem = 0;
+			MenuMain(iItem);
 			break;
 			case 10:
-				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 				cout << "Пропущенно часов(оправданных): " << SummJHours(l) << endl;
 				system("pause");
 				break;
 			case 11:
-				if (!l) { cout << "Список пуст!" << endl; system("pause"); break; }
+				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 				cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
 				system("pause");
 				break;

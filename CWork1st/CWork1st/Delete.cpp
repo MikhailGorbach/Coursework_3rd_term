@@ -2,7 +2,7 @@
 
 List* DelFirstStudent(List* l, int* id)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return l; }
+	if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return l; }
 
 	List* tmpId;
 	for (tmpId = l; tmpId; tmpId = tmpId->next)
@@ -15,14 +15,13 @@ List* DelFirstStudent(List* l, int* id)
 	l = l->next;
 	delete temp;
 
-	cout << "\x1b[32mПервый элемент списка удалён.\x1b[0m" << endl;
+	cout << "\t\x1b[32mПервый элемент списка удалён.\x1b[0m\n" << endl << "\t";
 	system("pause");
 	return l;
 }
 void DelStudent(List* l, int counter, int* id)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return; }
-	if (!l->next) { cout << "Список пуст!" << endl; system("pause"); return; }
+	if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return; }
 
 	(*id)--;
 	List* temp = l;
@@ -43,12 +42,12 @@ void DelStudent(List* l, int counter, int* id)
 		temp = temp->next;
 		tempN = tempN->next;
 	}
-	cout << "\x1b[32mЭлемент\x1b[0m " << counter << " \x1b[32mудалён.\x1b[0m" << endl;
+	cout << "\t\x1b[32mЭлемент\x1b[0m " << counter << " \x1b[32mудалён.\x1b[0m\n" << endl << "\t";
 	system("pause");
 }
 List* DelLastStudent(List* l, List* r, int* id)
 {
-	if (!r) { cout << "Список пуст!" << endl; system("pause"); return r; }
+	if (!r) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return r; }
 
 	(*id)--;
 	for (r = l; r->next->next; r = r->next);
@@ -57,7 +56,7 @@ List* DelLastStudent(List* l, List* r, int* id)
 	r->next = 0;
 	delete temp;
 
-	cout << "\x1b[32mПоследний элемент списка удалён.\x1b[0m" << endl;
+	cout << "\t\x1b[32mПоследний элемент списка удалён.\x1b[0m\n" << endl << "\t";
 	system("pause");
 	return l;
 }
@@ -73,7 +72,7 @@ List* DelAllStudents(List* l, int* id)
 	}
 	l = 0;
 
-	cout << "\x1b[32mСписок удалён!\x1b[0m" << endl;
+	cout << "\t\x1b[32mСписок удалён!\x1b[0m\n" << endl << "\t";
 	system("pause");
 	return l;
 }

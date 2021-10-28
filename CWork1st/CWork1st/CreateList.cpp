@@ -10,7 +10,7 @@ List* NewTable(int* counter)
 	List* l = new List;
 	Inf a;
 	system("cls");
-	cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ (* для выхода)\x1b[0m\n" << endl << endl;
+	cout << "\n \x1b[36m<!--ВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ (* для выхода)-->\x1b[0m\n" << endl << endl;
 	cout << " Код группы: "; getline(cin, a.сodeGr); cout << "\n";
 	if (a.сodeGr == "*")
 	{
@@ -18,7 +18,7 @@ List* NewTable(int* counter)
 		return 0;
 	}
 	cout << " Фамилия: "; getline(cin, a.surname); cout << "\n";
-	cout << " Год рождения: "; 
+	cout << " Год рождения:"; 
 	CheckYear(a.year); cout << "\n";
 	CheckGender(a.gender); cout << "\n";
 	cout << " Количество пропущенных часов: "; 
@@ -33,12 +33,13 @@ List* NewTable(int* counter)
 }
 List* AddStudent(List* l, List* r, int* counter)
 {
-	if (!l) { cout << " Список пуст!" << endl; system("pause"); return l; }
+	if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return l; }
+
 	CursorVisabilityChange(1);
 	while (1)
 	{
 		system("cls");
-		cout << "\n \x1b[36mВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ (* для выхода)\x1b[0m\n" << endl << endl;
+		cout << "\n \x1b[36m<!--ВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ (* для выхода)-->\x1b[0m\n" << endl << endl;
 		List* temp = new List;
 		Inf a;
 		cout << " Код группы: "; cin.get(); getline(cin, a.сodeGr); cout << "\n";
@@ -85,7 +86,7 @@ int WriteFile(const string filename, List* l)
 {
 	ofstream fout(filename, ios::out);
 
-	if (!fout.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
+	if (!fout.is_open()) { cout << "\t\x1b[31mНе удалось открыть файл!\x1b[0m" << endl; cout << "\t"; system("pause"); return 1; }
 
 	List* temp = l;
 
@@ -102,15 +103,15 @@ int WriteFile(const string filename, List* l)
 
 		temp = temp->next;
 	}
-	cout << "\x1b[32mДанные записаны в файле\x1b[0m " << filename << "\x1b[32m.\x1b[0m" << endl;
-	system("pause");
+	cout << "\n\t\x1b[32mДанные записаны в файле\x1b[0m " << filename << " \x1b[32m.\x1b[0m\n" << endl;
+	cout << "\t"; system("pause");
 	return 0;
 }
 int ReadFile(const string filename, List** l, List** r, List* end)
 {
 	ifstream fin(filename, ios::in);
 
-	if (!fin.is_open()) { cout << "Не удалось открыть файл!" << endl; system("pause"); return 1; }
+	if (!fin.is_open()) { cout << "\n\t\x1b[31mНе удалось открыть файл!\x1b[0m\n" << endl; cout << "\t"; system("pause"); return 1; }
 
 	if (!end)
 	{
@@ -131,8 +132,8 @@ int ReadFile(const string filename, List** l, List** r, List* end)
 			if (*l) { *r = AddS(*r, a); n++; }
 			else { *l = AddNS(a); *r = *l; n++; }
 		}
-		cout << "\x1b[32mДанные загружены из файла\x1b[0m " << filename << " \x1b[32m.\x1b[0m" << endl;
-		system("pause");
+		cout << "\n\t\x1b[32mДанные загружены из файла\x1b[0m " << filename << " \x1b[32m.\x1b[0m\n" << endl;
+		cout << "\t"; system("pause");
 		return n;
 	}
 	else
@@ -154,8 +155,8 @@ int ReadFile(const string filename, List** l, List** r, List* end)
 				>> a.jHours;
 			*r = AddS(*r, a); n++;
 		}
-		cout << "Данные загружены из файла " << filename << " и дополнены к новому списку." << endl;
-		system("pause");
+		cout << "\n\t\x1b[32mДанные загружены из файла\x1b[0m " << filename << " \x1b[32mи дополнены к списку.\x1b[0m\n" << endl;
+		cout << "\t"; system("pause");
 		return n;
 	}
 }
