@@ -67,10 +67,10 @@ void PrintBySur(List* l, string surname)
 	}
 	if (find)
 	{
-		system("cls");
+		cout << "\t"; system("cls");
 		List* temp = l;
 		cout
-			<< endl << "По фамилии " << surname << " найдены следующие записи:" << endl;
+			<< endl << "\tПо фамилии " << surname << " \x1b[32mнайдены\x1b[0m следующие записи:\n" << endl;
 		cout << " ________________________________________________________________________________" << endl;
 		cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
 		while (temp)
@@ -86,18 +86,18 @@ void PrintBySur(List* l, string surname)
 			}
 			temp = temp->next;
 		}
-		cout << " ________________________________________________________________________________ " << endl;
+		cout << " ________________________________________________________________________________ " << endl << "\n\t";
 		system("pause");
 	}
 	else
 	{
-		cout << "По фамилии " << surname << " нет ни одной записи." << endl;
+		cout << "\n\tПо фамилии " << surname << " \x1b[31mнет\x1b[0m записей.\n" << endl << "\t";
 		system("pause");
 	}
 }
 int PrintById(List* l, int id)
 {
-	if (!l) { cout << "Список пуст!" << endl; system("pause"); return 1; }
+	if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return 1; }
 
 	cout << " ________________________________________________________________________________" << endl;
 	cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
@@ -112,7 +112,7 @@ int PrintById(List* l, int id)
 				<< setw(4) << temp->p.year << " | " << setw(10) << temp->p.sHours << " | "
 				<< setw(13) << temp->p.jHours << " | "
 				<< setw(3) << temp->p.gender << " |" << endl;
-			cout << " ________________________________________________________________________________ " << endl;
+			cout << " ________________________________________________________________________________ \n" << endl << "\t";
 			system("pause");
 			return 0;
 		}

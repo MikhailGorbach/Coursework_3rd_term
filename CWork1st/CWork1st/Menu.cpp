@@ -52,6 +52,15 @@ void MenuExit(int iItem)
 	printf("\n\n\n\n\t\t\t\t\x1b[31mВы уверены, что хотите выйти?\x1b[0m\n\n\n");
 	printf("\t\t\t\t\t%s Да\n\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
 	printf("\t\t\t\t\t%s Нет\n\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
-	printf("\t\t\t\t\t%s Выйти, сохранив данные в файл\n\n\n", iItem == 3 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t\t\t\t\t%s Выйти, сохранив данные в файл\n\n\n", iItem == 3 ? "\x1b[31m--->\x1b[0m" : " ");
 	printf("\t\t\t\t\x1b[36m<!--Управление осуществляется стрелками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\x1b[0m");
+}
+void MenuSortFirst(int iItem)
+{
+	system("cls");
+	printf("\n\t\x1b[32mВыберете сортировку\x1b[0m\n\n");
+	printf("\t%s По возрастанию\n\n", iItem == 1 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s По убыванию\n\n", iItem == 2 ? "\x1b[33m-->\x1b[0m" : " ");
+	printf("\t%s \x1b[31mВыйти\x1b[0m\n\n", iItem == 3 ? "\x1b[31m--->\x1b[0m" : " ");
+	printf("\t\x1b[36m<!--Управление осуществляется стрелками ВВЕРХ, ВНИЗ, ВПРАВО-->\n\x1b[0m");
 }

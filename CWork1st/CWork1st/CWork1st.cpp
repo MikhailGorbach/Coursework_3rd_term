@@ -103,9 +103,9 @@ int main()
 				system("cls");
 				CursorVisabilityChange(1);
 				cout << "\n\tВведите номер студента, у которого хотите произвести корректировку -> ";
-				CursorVisabilityChange(0);
 				int num = 0;
 				cin >> num;
+				CursorVisabilityChange(0);
 				if (num > id)
 				{
 					cout << "\n\t\x1b[31mНет такого студента!\x1b[0m" << endl << "\n\t";
@@ -178,132 +178,166 @@ int main()
 			case 6:
 			{
 				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
-				if (!l) { cout << "\t\x1b[31mНедостаточно элементов сортировки.\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
+				if (!l->next) { cout << "\t\x1b[31mНедостаточно элементов сортировки.\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 
 				system("cls");
-				
+
 				bool bExit = false;
 
 				int iItem = 1;
 				int nLast = 7;
 
-				cout << "\n\t\x1b[36m!Выбор по нажатию клавишы 8 или 2 и Enter!\n\x1b[0m" << endl;
-				cout
-					<< "\tВыберите сортировку:\n" << endl
-					<< "\t8 - по возрастанию\n" << endl
-					<< "\t2 - по убыванию\n" << endl;
-				cout << "\t";
-				string Check;
-				cin >> Check;
-				if (Check == "8")
+				int iItemM = 1;
+				int nLastM = 3;
+
 				while (!bExit)
 				{
-					MenuSort(iItem);
+					MenuSortFirst(iItemM);
 
 					char Key = _getch();
 
 					if (GetAsyncKeyState(VK_UP))
 					{
 						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
-						if (0 < iItem - 1)
-							iItem = iItem - 1;
+						if (0 < iItemM - 1)
+							iItemM = iItemM - 1;
 						else
-							iItem = nLast;
-						MenuSort(iItem);
+							iItemM = nLastM;
+						MenuSortFirst(iItemM);
 					}
 					if (GetAsyncKeyState(VK_DOWN))
 					{
 						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
-						if (iItem < nLast)
-							iItem = iItem + 1;
+						if (iItemM < nLastM)
+							iItemM = iItemM + 1;
 						else
-							iItem = 1;
-						MenuSort(iItem);
+							iItemM = 1;
+						MenuSortFirst(iItemM);
 					}
 					if (GetAsyncKeyState(VK_RIGHT))
 					{
 						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
-						MenuSort(iItem);
-						switch (iItem)
+						MenuSortFirst(iItemM);
+						switch (iItemM)
 						{
 						case 1:
-							SortSurToHigh(l);
+							while (!bExit)
+							{
+								MenuSort(iItem);
+
+								char Key = _getch();
+
+								if (GetAsyncKeyState(VK_UP))
+								{
+									keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
+									if (0 < iItem - 1)
+										iItem = iItem - 1;
+									else
+										iItem = nLast;
+									MenuSort(iItem);
+								}
+								if (GetAsyncKeyState(VK_DOWN))
+								{
+									keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
+									if (iItem < nLast)
+										iItem = iItem + 1;
+									else
+										iItem = 1;
+									MenuSort(iItem);
+								}
+								if (GetAsyncKeyState(VK_RIGHT))
+								{
+									keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+									MenuSort(iItem);
+									switch (iItem)
+									{
+									case 1:
+										SortSurToHigh(l);
+										break;
+									case 2:
+										SortYearToHigh(l);
+										break;
+									case 3:
+										SortGroupToHigh(l);
+										break;
+									case 4:
+										SortJHoursToHigh(l);
+										break;
+									case 5:
+										SortSHoursToHigh(l);
+										break;
+									case 6:
+										SortGenderToHigh(l);
+										break;
+									case 7:
+										bExit = true;
+									}
+								}
+							}
 							break;
 						case 2:
-							SortYearToHigh(l);
+							while (!bExit)
+							{
+								MenuSort(iItem);
+
+								char Key = _getch();
+
+								if (GetAsyncKeyState(VK_UP))
+								{
+									keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
+									if (0 < iItem - 1)
+										iItem = iItem - 1;
+									else
+										iItem = nLast;
+									MenuSort(iItem);
+								}
+								if (GetAsyncKeyState(VK_DOWN))
+								{
+									keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
+									if (iItem < nLast)
+										iItem = iItem + 1;
+									else
+										iItem = 1;
+									MenuSort(iItem);
+								}
+								if (GetAsyncKeyState(VK_RIGHT))
+								{
+									keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+									MenuSort(iItem);
+									switch (iItem)
+									{
+									case 1:
+										SortSurToLow(l);
+										break;
+									case 2:
+										SortYearToLow(l);
+										break;
+									case 3:
+										SortGroupToLow(l);
+										break;
+									case 4:
+										SortJHoursToLow(l);
+										break;
+									case 5:
+										SortSHoursToLow(l);
+										break;
+									case 6:
+										SortGenderToLow(l);
+										break;
+									case 7:
+										bExit = true;
+									}
+								}
+							}
 							break;
 						case 3:
-							SortGroupToHigh(l);
-							break;
-						case 4:
-							SortJHoursToHigh(l);
-							break;
-						case 5:
-							SortSHoursToHigh(l);
-							break;
-						case 6:
-							SortGenderToHigh(l);
-							break;
-						case 7:
+						{
 							bExit = true;
+							break;
+						}
 						}
 					}
 				}
-				else if (Check == "2")
-				while (!bExit)
-				{
-					MenuSort(iItem);
-
-					char Key = _getch();
-
-					if (GetAsyncKeyState(VK_UP))
-					{
-						keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
-						if (0 < iItem - 1)
-							iItem = iItem - 1;
-						else
-							iItem = nLast;
-						MenuSort(iItem);
-					}
-					if (GetAsyncKeyState(VK_DOWN))
-					{
-						keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
-						if (iItem < nLast)
-							iItem = iItem + 1;
-						else
-							iItem = 1;
-						MenuSort(iItem);
-					}
-					if (GetAsyncKeyState(VK_RIGHT))
-					{
-						keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
-						MenuSort(iItem);
-						switch (iItem)
-						{
-						case 1:
-							SortSurToLow(l);
-							break;
-						case 2:
-							SortYearToLow(l);
-							break;
-						case 3:
-							SortGroupToLow(l);
-							break;
-						case 4:
-							SortJHoursToLow(l);
-							break;
-						case 5:
-							SortSHoursToLow(l);
-							break;
-						case 6:
-							SortGenderToLow(l);
-							break;
-						case 7:
-							bExit = true;
-						}
-					}
-				}
-				else break;
 			}
 			iItem = 0;
 			MenuMain(iItem);
@@ -312,9 +346,12 @@ int main()
 			{
 				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 
-				cout << "Введите фамилию студента для поиска: ";
+				system("cls");
+				CursorVisabilityChange(1);
+				cout << "\n\tВведите фамилию студента для поиска: ";
 				string surname = "";
 				cin >> surname;
+				CursorVisabilityChange(0);
 				PrintBySur(l, surname);
 			}
 			break;

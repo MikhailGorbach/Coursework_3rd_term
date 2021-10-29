@@ -49,12 +49,12 @@ List* AddStudent(List* l, List* r, int* counter)
 			return r;
 		}
 		cout << " Фамилия: "; getline(cin, a.surname); cout << "\n";
-		cout << " Год рождения: ";
+		cout << " Год рождения:";
 		CheckYear(a.year); cout << "\n";
 		CheckGender(a.gender); cout << "\n";
-		cout << " Кол-во пропущенных часов: ";
+		cout << " Кол-во пропущенных часов:";
 		CheckHours(a.sHours); cout << "\n";
-		cout << " Кол-во оправданных часов: ";
+		cout << " Кол-во оправданных часов:";
 		CheckHours(a.jHours); cout << "\n";
 		a.id = r->p.id + 1;
 		(*counter)++;
