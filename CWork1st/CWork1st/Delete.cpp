@@ -35,6 +35,7 @@ void DelStudent(List* l, int counter, int* id)
 			{
 				tmpId->p.id--;
 			}
+			tempN->next->prev = temp;
 			temp->next = tempN->next;
 			delete tempN;
 			break;

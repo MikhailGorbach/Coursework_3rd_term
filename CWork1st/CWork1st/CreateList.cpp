@@ -11,7 +11,7 @@ List* NewTable(int* counter)
 	Inf a;
 	system("cls");
 	cout << "\n \x1b[36m<!--ÂÂÅÄÈÒÅ ÄÀÍÍÛÅ Î ÑÒÓÄÅÍÒÅ (* äëÿ âûõîäà)-->\x1b[0m\n" << endl << endl;
-	cout << " Êîä ãðóïïû: "; getline(cin, a.ñodeGr); cout << "\n";
+	cout << " Êîä ãðóïïû: "; cin.get(); getline(cin, a.ñodeGr); cout << "\n";
 	if (a.ñodeGr == "*")
 	{
 		CursorVisabilityChange(0);
@@ -28,6 +28,7 @@ List* NewTable(int* counter)
 	a.id = ++(*counter);
 	l->p = a;
 	l->next = 0;
+	l->prev = 0;
 	CursorVisabilityChange(0);
 	return l;
 }
@@ -61,6 +62,7 @@ List* AddStudent(List* l, List* r, int* counter)
 		temp->p = a;
 		temp->next = 0;
 		r->next = temp;
+		temp->prev = r;
 		r = temp;
 	}
 	CursorVisabilityChange(0);
@@ -71,6 +73,7 @@ List* AddNS(Inf a)
 	List* temp = new List;
 	temp->p = a;
 	temp->next = 0;
+	temp->prev = 0;
 	return temp;
 }
 List* AddS(List* r, Inf a)
@@ -79,6 +82,7 @@ List* AddS(List* r, Inf a)
 	temp->p = a;
 	temp->next = 0;
 	r->next = temp;
+	temp->prev = r;
 	r = temp;
 	return r;
 }

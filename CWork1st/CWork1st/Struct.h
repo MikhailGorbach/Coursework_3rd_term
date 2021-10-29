@@ -17,4 +17,5 @@ struct List
 {
 	Inf p;
 	List* next;
+	List* prev;
 };

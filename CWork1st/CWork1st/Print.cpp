@@ -29,10 +29,14 @@ void Print(List* l, int* id, int* iItem)
 			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
 			if (list == endlist)
 			{
-				list = 0;
-				temp = tempprev;
+				list = 1;
+				temp = l;
+				temp = PrintTen(temp);
+				cout << " ________________________________________________________________________________ " << endl;
+				cout << "Страница " << list << " из " << endlist << endl;
+				printf("\n\n\t\x1b[36m<!--Нажмите LEFT, если хотите вывести весь список-->\n\x1b[0m");
 			}
-			if (list < endlist)
+			else if (list < endlist)
 			{
 				list++;
 				temp = PrintTen(temp);
