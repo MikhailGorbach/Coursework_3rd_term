@@ -66,7 +66,11 @@ void PrintBySur(List* l, string surname)
 
 	while (temp)
 	{
-		if (temp->p.surname == surname) find = true;
+		if (temp->p.surname == surname)
+		{
+			find = true;
+			break;
+		}
 		temp = temp->next;
 	}
 	if (find)
@@ -131,35 +135,29 @@ void PrintAll(List* l, int* id)
 	system("cls");
 
 	List* temp = l;
-
-	while (1)
+	printf("\t\x1b[36m<!--Управление осуществляется стрелками ВНИЗ, ВПРАВО-->\n\x1b[0m");
+	cout << " ________________________________________________________________________________" << endl;
+	cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
+	while (temp)
 	{
-		system("cls");
-		printf("\t\x1b[36m<!--Управление осуществляется стрелками ВНИЗ, ВПРАВО-->\n\x1b[0m");
-		cout << " ________________________________________________________________________________" << endl;
-		cout << "| №  |   Код группы   |    Фамилия     | Год  | Часы : ув. / неув. причина | Пол |" << endl;
-		while (temp)
-		{
 
-			cout
-				<< "| " << setw(2) << temp->p.id
-				<< " | " << setw(14)
-				<< temp->p.сodeGr << " | "
-				<< setw(14)
-				<< temp->p.surname << " | "
-				<< setw(4)
-				<< temp->p.year << " | "
-				<< setw(10)
-				<< temp->p.jHours << " | "
-				<< setw(13)
-				<< temp->p.sHours << " | "
-				<< setw(3) << temp->p.gender << " |" << endl;
-			temp = temp->next;
-		}
-		cout << " ________________________________________________________________________________ " << endl;
-		system("pause");
-		break;
+		cout
+			<< "| " << setw(2) << temp->p.id
+			<< " | " << setw(14)
+			<< temp->p.сodeGr << " | "
+			<< setw(14)
+			<< temp->p.surname << " | "
+			<< setw(4)
+			<< temp->p.year << " | "
+			<< setw(10)
+			<< temp->p.jHours << " | "
+			<< setw(13)
+			<< temp->p.sHours << " | "
+			<< setw(3) << temp->p.gender << " |" << endl;
+		temp = temp->next;
 	}
+	cout << " ________________________________________________________________________________ " << endl;
+	system("pause");
 }
 List* PrintTen(List* l)
 {

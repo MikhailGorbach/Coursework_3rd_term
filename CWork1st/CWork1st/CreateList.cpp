@@ -65,8 +65,6 @@ List* AddStudent(List* l, List* r, int* counter)
 		temp->prev = r;
 		r = temp;
 	}
-	CursorVisabilityChange(0);
-	return r;
 }
 List* AddNS(Inf a)
 {

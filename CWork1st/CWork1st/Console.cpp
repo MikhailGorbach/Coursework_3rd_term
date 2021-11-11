@@ -6,13 +6,9 @@ void CursorVisabilityChange(int flag)
 	CONSOLE_CURSOR_INFO structCursorInfo;
 	GetConsoleCursorInfo(handle, &structCursorInfo);
 	if (flag == 0)
-	{
 		structCursorInfo.bVisible = FALSE;
-	}
 	else
-	{
 		structCursorInfo.bVisible = TRUE;
-	}
 	SetConsoleCursorInfo(handle, &structCursorInfo);
 }
 void ConsoleSettings()

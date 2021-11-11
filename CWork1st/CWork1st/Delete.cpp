@@ -2,16 +2,14 @@
 
 List* DelFirstStudent(List* l, int* id)
 {
-	if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return l; }
-
-	List* tmpId;
-	for (tmpId = l; tmpId; tmpId = tmpId->next)
+	List* temp;
+	for (temp = l; temp; temp = temp->next)
 	{
-		tmpId->p.id--;
+		temp->p.id--;
 	}
 
 	(*id)--;
-	List* temp = l;
+	temp = l;
 	l = l->next;
 	delete temp;
 
@@ -21,8 +19,6 @@ List* DelFirstStudent(List* l, int* id)
 }
 void DelStudent(List* l, int counter, int* id)
 {
-	if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); return; }
-
 	(*id)--;
 	List* temp = l;
 	List* tempN = temp->next;
@@ -63,7 +59,6 @@ List* DelLastStudent(List* l, List* r, int* id)
 }
 List* DelAllStudents(List* l, int* id)
 {
-
 	for (l; l;)
 	{
 		(*id)--;

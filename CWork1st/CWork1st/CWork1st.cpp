@@ -18,7 +18,7 @@ int main()
 		char Key = _getch();
 		if (GetAsyncKeyState(VK_UP))
 		{
-			keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+			keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);
 			if (0 < iItem - 1)
 				iItem = iItem - 1;
 			else
@@ -27,7 +27,7 @@ int main()
 		}
 		if (GetAsyncKeyState(VK_DOWN))
 		{
-			keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+			keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);
 			if (iItem < nLast)
 				iItem = iItem + 1;
 			else
@@ -36,7 +36,7 @@ int main()
 		}
 		if (GetAsyncKeyState(VK_RIGHT))
 		{
-			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);//Отжимаем кнопку
+			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
 			MenuMain(iItem);
 			switch (iItem)
 			{
