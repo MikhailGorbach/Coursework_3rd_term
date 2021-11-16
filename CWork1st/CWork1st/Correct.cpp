@@ -81,10 +81,10 @@ void CorJHours(List* l, int num)
 	{
 		if (temp->p.id == num)
 		{
-			cout << "¬ведите новое количество пропущенных часов у студента (опр.): ";
+			cout << "\n¬ведите новое количество пропущенных часов у студента (опр.): ";
 			CheckHours(sH);
 			temp->p.jHours = sH;
-			cout << "\x1b[32m„асы изменены на\x1b[0m " << temp->p.jHours << "\n\n";
+			cout << "\n\x1b[32m„асы изменены на\x1b[0m " << temp->p.jHours << "\n\n";
 			system("pause");
 			break;
 		}

@@ -10,7 +10,8 @@ int main()
 	int id = 0;
 
 	int iItem = 1;
-	int nLast = 12;
+	int nLast = 11;
+	bool skip_cinget = true;
 
 	MenuMain(iItem);
 	while (1)
@@ -43,7 +44,7 @@ int main()
 			case 1:					//Создание таблицы
 				if (!l)
 				{
-					l = r = NewTable(&id);
+					l = r = NewTable(&id, skip_cinget);
 					MenuMain(iItem);
 				}
 				else
@@ -76,7 +77,7 @@ int main()
 					cout << "\n";
 					if (number == 0)
 					{
-						l = r = DelAllStudents(l, &id);
+						l = r = DelAllStudents(l, &id, &skip_cinget);
 						break;
 					}
 					else if (number <= id && number > 0)
@@ -396,7 +397,7 @@ int main()
 					cin >> filename;
 					CursorVisabilityChange(0);
 					if (filename == "*") break;
-					else if (filename.size() < 3)
+					else if (filename.size() < 3 || filename.size() > 30)
 					{
 						cout << "\n\t\x1b[31mНеправильное имя файла\x1b[0m\n" << endl;
 						cout << "\t";
@@ -411,16 +412,15 @@ int main()
 			MenuMain(iItem);
 			break;
 			case 10:
+				system("pause");
 				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
-				cout << "Пропущенно часов(оправданных): " << SummJHours(l) << endl;
+				cout
+					<< endl << "\n\t\x1b[36m<!--Отчёт по посещаемости студентов-->\x1b[0m\n" << endl;
+				WriteReport(SummJHours(l), PerSHours(l));
+				cout << ReadReport() << "\n\t";
 				system("pause");
 				break;
 			case 11:
-				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
-				cout << "Процент пропущенных(неоправданных) часов: " << PerSHours(l) << "%" << endl;
-				system("pause");
-				break;
-			case 12:
 			{
 				bool bExit = false;
 

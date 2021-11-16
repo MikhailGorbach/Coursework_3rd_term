@@ -4,14 +4,24 @@
 #include "Console.h"
 #include <fstream>
 
-List* NewTable(int* counter)
+List* NewTable(int* counter, bool skip_cinget)
 {
 	CursorVisabilityChange(1);
 	List* l = new List;
 	Inf a;
 	system("cls");
+	cin.clear();
 	cout << "\n \x1b[36m<!--ВВЕДИТЕ ДАННЫЕ О СТУДЕНТЕ (* для выхода)-->\x1b[0m\n" << endl << endl;
-	cout << " Код группы: "; cin.get(); getline(cin, a.сodeGr); cout << "\n";
+	cout << " Код группы: ";
+	if (skip_cinget)
+	{
+		getline(cin, a.сodeGr);
+	}
+	else
+	{
+		cin.get(); getline(cin, a.сodeGr);
+	}
+	cout << "\n";
 	if (a.сodeGr == "*")
 	{
 		CursorVisabilityChange(0);
@@ -161,4 +171,25 @@ int ReadFile(const string filename, List** l, List** r, List* end)
 		cout << "\t"; system("pause");
 		return n;
 	}
+}
+void WriteReport(int sum, float perc)
+{
+	ofstream fout("Отчёт.txt", ios::out);
+
+	if (!fout.is_open()) { cout << "\t\x1b[31mНе удалось открыть файл!\x1b[0m" << endl; cout << "\t"; system("pause"); return; }
+
+	fout << sum << endl << perc << endl;
+}
+string ReadReport()
+{
+	ifstream fin("Отчёт.txt", ios::in);
+
+	if (!fin.is_open()) { cout << "\t\x1b[31mНе удалось открыть файл!\x1b[0m" << endl; cout << "\t"; system("pause"); return ""; }
+
+	string sum = "";
+	string perc = "";
+
+	fin >> sum >> perc;
+
+	return "\tОбщее количество пропущенных часов: " + sum + "\n\n\tПроцент неоправданных часов по отношению к общему числу: " + perc + "\n";
 }

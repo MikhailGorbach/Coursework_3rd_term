@@ -57,7 +57,7 @@ List* DelLastStudent(List* l, List* r, int* id)
 	system("pause");
 	return l;
 }
-List* DelAllStudents(List* l, int* id)
+List* DelAllStudents(List* l, int* id, bool* skip_cinget)
 {
 	for (l; l;)
 	{
@@ -67,6 +67,7 @@ List* DelAllStudents(List* l, int* id)
 		delete temp;
 	}
 	l = 0;
+	(*skip_cinget) = false;
 
 	cout << "\t\x1b[32mСписок удалён!\x1b[0m\n" << endl << "\t";
 	system("pause");
