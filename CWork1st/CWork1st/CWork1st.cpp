@@ -412,7 +412,7 @@ int main()
 			MenuMain(iItem);
 			break;
 			case 10:
-				system("pause");
+				system("cls");
 				if (!l) { cout << "\t\x1b[31mСписок пуст!\x1b[0m" << endl; cout << "\t"; system("pause"); break; }
 				cout
 					<< endl << "\n\t\x1b[36m<!--Отчёт по посещаемости студентов-->\x1b[0m\n" << endl;
